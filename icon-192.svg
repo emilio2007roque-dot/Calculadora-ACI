@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a" />
+      <stop offset="50%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+    <linearGradient id="drum" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc" />
+      <stop offset="100%" stop-color="#cbd5e1" />
+    </linearGradient>
+    <linearGradient id="orange" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background rounded rect -->
+  <rect width="192" height="192" rx="42" fill="url(#bg)" />
+
+  <!-- Inner subtle grid lines -->
+  <circle cx="96" cy="96" r="76" stroke="rgba(255,255,255,0.12)" stroke-width="2" fill="none" />
+  <circle cx="96" cy="96" r="56" stroke="rgba(255,255,255,0.08)" stroke-width="1.5" stroke-dasharray="4 4" fill="none" />
+
+  <!-- Concrete Mixer Drum Shape -->
+  <g transform="translate(96, 90)">
+    <!-- Base stand -->
+    <path d="M -40,48 L 40,48 M -28,48 L -14,24 M 28,48 L 14,24" stroke="#e2e8f0" stroke-width="5" stroke-linecap="round" />
+    
+    <!-- Mixer drum body -->
+    <path d="M -34,16 L -40,-12 L -20,-34 L 20,-34 L 40,-12 L 34,16 Z" fill="url(#drum)" stroke="#0f172a" stroke-width="3" stroke-linejoin="round" />
+    
+    <!-- Center stripe -->
+    <path d="M -38,-5 L 38,-5 L 35,6 L -35,6 Z" fill="url(#orange)" />
+    
+    <!-- Mixer mouth opening -->
+    <ellipse cx="0" cy="-34" rx="20" ry="7" fill="#0284c7" stroke="#0f172a" stroke-width="2.5" />
+    <ellipse cx="0" cy="-34" rx="14" ry="4" fill="#0f172a" />
+    
+    <!-- Aggregate pebbles -->
+    <circle cx="-16" cy="6" r="3.5" fill="#64748b" />
+    <circle cx="0" cy="10" r="4.5" fill="#475569" />
+    <circle cx="16" cy="5" r="3.5" fill="#64748b" />
+    <circle cx="-8" cy="-18" r="3" fill="#cbd5e1" opacity="0.9" />
+    <circle cx="10" cy="-16" r="3" fill="#cbd5e1" opacity="0.9" />
+  </g>
+
+  <!-- ACI badge -->
+  <rect x="52" y="142" width="88" height="26" rx="13" fill="#0f172a" stroke="#f59e0b" stroke-width="2" />
+  <text x="96" y="159" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="900" fill="#f8fafc" text-anchor="middle" letter-spacing="1">ACI 211.1</text>
+</svg>

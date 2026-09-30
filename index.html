@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Calculadora de Mezclas de Concreto - Método ACI 211.1</title>
+  
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#1e40af">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Mezclas ACI">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <link rel="icon" type="image/svg+xml" href="icons/icon-192.svg">
+
+  <!-- Estilos principales -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Encabezado de la Aplicación -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-wrapper">
+        <img src="icons/icon-192.svg" alt="Logo ACI" class="brand-icon">
+        <div class="brand-titles">
+          <h1>Calculadora de Mezclas <span class="badge-aci">ACI 211.1</span></h1>
+          <div class="subtitle">
+            <span>Dosificación y Memoria de Cálculo</span>
+            <span>•</span>
+            <span id="appStatus">Listo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Selector rápido de ejemplos -->
+        <select id="presetSelect" class="form-select" style="max-width: 220px; font-size: 0.8rem; background: #0f172a; color: white; border-color: #334155;">
+          <!-- Poblado dinámicamente -->
+        </select>
+
+        <button id="btnOpenMobileModal" class="btn btn-outline-white btn-sm" title="Escanear QR para abrir en tu celular">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          <span>📱 En Celular</span>
+        </button>
+
+        <button id="btnPrintReport" class="btn btn-outline-white btn-sm" title="Imprimir o exportar PDF">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+          <span>PDF / Imprimir</span>
+        </button>
+
+        <button id="btnInstallPwa" class="btn btn-accent btn-sm" style="display: none;" title="Instalar aplicación en tu dispositivo">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>Instalar App</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Pestañas de Navegación -->
+  <nav class="nav-tabs-wrapper">
+    <div class="nav-tabs">
+      <button class="nav-tab active" data-tab="tab-calc">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg>
+        <span>Calculadora</span>
+      </button>
+
+      <button class="nav-tab" data-tab="tab-site">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
+        <span>Dosificación en Obra</span>
+      </button>
+
+      <button class="nav-tab" data-tab="tab-memory">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <span>Memoria de Cálculo</span>
+      </button>
+
+      <button class="nav-tab" data-tab="tab-charts">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        <span>Gráficos & Distribución</span>
+      </button>
+
+      <button class="nav-tab" data-tab="tab-projects">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        <span>Mis Proyectos</span>
+      </button>
+
+      <button class="nav-tab" data-tab="tab-tables">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        <span>Tablas ACI</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Encabezado exclusivo para Impresión / PDF -->
+  <div class="print-header print-only">
+    <h2>MEMORIA DE DISEÑO DE MEZCLA DE CONCRETO</h2>
+    <p>Norma ACI 211.1 - Método de los Volúmenes Absolutos</p>
+    <p style="font-size: 0.85rem; color: #555;">Generado por Calculadora de Mezclas ACI</p>
+  </div>
+
+  <!-- Contenedor Principal de la App -->
+  <main class="main-content">
+
+    <!-- ================================================================= -->
+    <!-- PESTAÑA 1: CALCULADORA PRINCIPAL                                  -->
+    <!-- ================================================================= -->
+    <div id="tab-calc" class="tab-panel active">
+      <div class="calc-grid">
+
+        <!-- Columna Izquierda: Parámetros y Pasos ACI -->
+        <div class="steps-column">
+
+          <!-- PASO 1: Resistencia f'c y f'cr -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="step-number">1</span>
+                <h2 class="card-title">Resistencia a la Compresión (f'c)</h2>
+              </div>
+              <div class="card-badge">Paso 1 ACI</div>
+            </div>
+            <div class="card-body">
+              <div class="form-grid">
+                
+                <!-- Unidades de Resistencia -->
+                <div class="form-group">
+                  <label>Unidad de Resistencia</label>
+                  <div style="display:flex; gap:1rem; align-items:center; height:38px;">
+                    <label style="cursor:pointer; display:flex; align-items:center; gap:0.35rem; font-weight:600;">
+                      <input type="radio" name="unit" id="unitKgcm2" value="kgcm2" checked> kg/cm²
+                    </label>
+                    <label style="cursor:pointer; display:flex; align-items:center; gap:0.35rem; font-weight:600;">
+                      <input type="radio" name="unit" id="unitMpa" value="mpa"> MPa
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Resistencia especificada f'c -->
+                <div class="form-group">
+                  <label for="inputFc">Resistencia Especificada (f'c)</label>
+                  <div class="input-with-unit">
+                    <input type="number" id="inputFc" class="form-control" value="210" min="100" max="600" step="5">
+                    <span class="input-unit-badge unit-fc-label">kg/cm²</span>
+                  </div>
+                  <span class="helper-text">Valor a los 28 días según planos estructurales</span>
+                </div>
+
+              </div>
+
+              <!-- Desviación Estándar -->
+              <div style="margin-top: 1rem; border-top: 1px dashed var(--border-color); padding-top: 0.75rem;">
+                <label style="cursor:pointer; display:flex; align-items:center; gap:0.5rem; font-size:0.875rem; font-weight:600;">
+                  <input type="checkbox" id="checkStdDev">
+                  <span>Conozco la Desviación Estándar del productor / laboratorio (s)</span>
+                </label>
+                <div id="stdDevWrap" style="display:none; margin-top:0.75rem; max-width: 250px;">
+                  <label for="inputStdDev" style="font-size:0.8rem; font-weight:600;">Desviación Estándar (s)</label>
+                  <div class="input-with-unit">
+                    <input type="number" id="inputStdDev" class="form-control" value="25" min="0" max="100" step="1">
+                    <span class="input-unit-badge unit-fc-label">kg/cm²</span>
+                  </div>
+                  <span class="helper-text">Mínimo 30 ensayos consecutivos requeridos</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- PASO 2: Trabajabilidad (Slump) y TMN -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="step-number">2</span>
+                <h2 class="card-title">Revenimiento (Slump) y Agregado Grueso</h2>
+              </div>
+              <div class="card-badge">Paso 2 y 3 ACI</div>
+            </div>
+            <div class="card-body">
+              <div class="form-grid">
+                
+                <!-- Tipo de estructura -->
+                <div class="form-group">
+                  <label for="inputSlumpPreset">Elemento Estructural (Tabla 6.3.1)</label>
+                  <select id="inputSlumpPreset" class="form-select">
+                    <!-- Poblado por JS -->
+                  </select>
+                </div>
+
+                <!-- Slump en cm -->
+                <div class="form-group">
+                  <label for="inputSlumpCm">Asentamiento (Slump / Revenimiento)</label>
+                  <div class="input-with-unit">
+                    <input type="number" id="inputSlumpCm" class="form-control" value="8.0" min="2.0" max="20.0" step="0.5">
+                    <span class="input-unit-badge">cm (~3")</span>
+                  </div>
+                  <span class="helper-text">Medido con el Cono de Abrams</span>
+                </div>
+
+                <!-- Tamaño Máximo Nominal (TMN) -->
+                <div class="form-group" style="grid-column: 1 / -1;">
+                  <label for="inputTmn">Tamaño Máximo Nominal del Agregado (TMN)</label>
+                  <select id="inputTmn" class="form-select">
+                    <!-- Poblado por JS -->
+                  </select>
+                  <span class="helper-text">Verificar: ≤ 1/5 menor dimensión de encofrado, ≤ 3/4 separación libre de varillas</span>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- PASO 3: Aire, Agua y Aditivos -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="step-number">3</span>
+                <h2 class="card-title">Aire, Agua de Mezclado y Aditivos</h2>
+              </div>
+              <div class="card-badge">Paso 4 ACI</div>
+            </div>
+            <div class="card-body">
+              
+              <!-- Selector de tipo de concreto (Con/Sin aire) -->
+              <div class="form-group">
+                <label>Incorporación de Aire</label>
+                <div class="radio-cards">
+                  <label class="radio-card selected" id="cardNonAir">
+                    <input type="radio" name="airOption" id="radioNonAir" checked>
+                    <span class="radio-card-title">Sin Aire Incorporado</span>
+                    <span class="radio-card-desc">Concreto normal / obras convencionales (aire atrapado ~1-3%)</span>
+                  </label>
+
+                  <label class="radio-card" id="cardAir">
+                    <input type="radio" name="airOption" id="radioAir">
+                    <span class="radio-card-title">Con Aire Incorporado</span>
+                    <span class="radio-card-desc">Resistencia a heladas, sales o durabilidad especial</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Grado de exposición si hay aire incorporado -->
+              <div id="airExposureWrap" style="display:none; margin-top:1rem;">
+                <div class="form-group">
+                  <label for="inputAirExposure">Nivel de Exposición al Congelamiento</label>
+                  <select id="inputAirExposure" class="form-select">
+                    <option value="mild">Exposición Suave (Interiores sin congelamiento)</option>
+                    <option value="modAir" selected>Exposición Moderada (Frío exterior, humedad media)</option>
+                    <option value="sevAir">Exposición Severa (Saturación continua y sales)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Aditivo Plastificante / Reductor de agua -->
+              <div style="margin-top: 1rem; border-top: 1px dashed var(--border-color); padding-top: 0.75rem;">
+                <label style="cursor:pointer; display:flex; align-items:center; gap:0.5rem; font-size:0.875rem; font-weight:600;">
+                  <input type="checkbox" id="checkAdditive">
+                  <span>Usar Aditivo Reductor de Agua / Plastificante</span>
+                </label>
+                <div id="additiveWrap" style="display:none; margin-top:0.75rem; max-width: 280px;">
+                  <label for="inputWaterReduction" style="font-size:0.8rem; font-weight:600;">% Reducción de Agua Estimada</label>
+                  <div class="input-with-unit">
+                    <input type="number" id="inputWaterReduction" class="form-control" value="10" min="1" max="30" step="1">
+                    <span class="input-unit-badge">%</span>
+                  </div>
+                  <span class="helper-text">Típico plastificante: 5% a 15% | Superplastificante: 15% a 25%</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- PASO 4: Durabilidad Ambiental -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="step-number">4</span>
+                <h2 class="card-title">Condición Ambiental y Durabilidad</h2>
+              </div>
+              <div class="card-badge">ACI 318 / 211</div>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label for="inputDurability">Ambiente de Exposición (Control de a/c máxima)</label>
+                <select id="inputDurability" class="form-select">
+                  <!-- Poblado dinámicamente -->
+                </select>
+                <span class="helper-text">La relación a/c final será la menor entre la exigida por resistencia y la exigida por durabilidad</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- PASO 5: Propiedades de los Materiales -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="step-number">5</span>
+                <h2 class="card-title">Propiedades de los Materiales (Laboratorio)</h2>
+              </div>
+              <div class="card-badge">Ensayos</div>
+            </div>
+            <div class="card-body">
+
+              <!-- Cemento -->
+              <h3 style="font-size:0.875rem; font-weight:700; color:var(--primary); margin-bottom:0.6rem; display:flex; align-items:center; gap:0.4rem;">
+                <span class="material-dot dot-cement"></span> Cemento
+              </h3>
+              <div class="form-grid" style="margin-bottom: 1.25rem;">
+                <div class="form-group">
+                  <label for="inputCementDensity">Densidad / Peso Específico</label>
+                  <div class="input-with-unit">
+                    <input type="number" id="inputCementDensity" class="form-control" value="3.15" step="0.01" min="2.8" max="3.3">
+                    <span class="input-unit-badge">g/cm³</span>
+                  </div>
+                  <span class="helper-text">Portland estándar: 3.15 g/cm³</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="inputBagWeight">Peso por Bolsa de Cemento</label>
+                  <select id="inputBagWeight" class="form-select">
+                    <option value="42.5" selected>42.5 kg (Perú, Colombia, Ecuador...)</option>
+                    <option value="50.0">50.0 kg (México, Chile, Argentina, España...)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Agregado Fino (Arena) -->
+              <h3 style="font-size:0.875rem; font-weight:700; color:#d97706; margin-bottom:0.6rem; display:flex; align-items:center; gap:0.4rem;">
+                <span class="material-dot dot-sand"></span> Agregado Fino (Arena)
+              </h3>
+              <div class="form-grid" style="margin-bottom: 1.25rem;">
+                <div class="form-group">
+                  <label for="inputSandDensity">Peso Específico de Masa (Seco)</label>
+                  <div class="input-with-unit">
+                    <input type="number" id="inputSandDensity" class="form-control" value="2.65" step="0.01" min="2.2" max="3.0">
+                    <span class="input-unit-badge">g/cm³</span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="inputSandFineness">Módulo de Finura (MF)</label>
+                  <div class="input-with-unit">
+                    <input type="number" id="inputSandFineness" class="form-control" value="2.70" step="0.05" min="2.40" max="3.00">
+                    <span class="input-unit-badge">MF</span>
+                  </div>
+                  <span class="helper-text">Rango norma ACI: 2.40 a 3.00</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="inputSandAbsorption">Absorción</label>
+                  <div class="input-with-unit">
+                    <input type="number" id="inputSandAbsorption" class="form-control" value="1.5" step="0.1" min="0" max="10">
+                    <span class="input-unit-badge">%</span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="inputSandMoisture">Humedad Natural en Obra</label>
+                  <div class="input-with-unit">
+                    <input type="number" id="inputSandMoisture" class="form-control" value="4.0" step="0.1" min="0" max="15">
+                    <span class="input-unit-badge">%</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Agregado Grueso (Grava / Piedra) -->
+              <h3 style="font-size:0.875rem; font-weight:700; color:#334155; margin-bottom:0.6rem; display:flex; align-items:center; gap:0.4rem;">
+                <span class="material-dot dot-gravel"></span> Agregado Grueso (Grava / Piedra Chancada)
+              </h3>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="inputGravelDensity">Peso Específico de Masa (Seco)</label>
+                  <div class="input-with-unit">
+                    <input type="number" id="inputGravelDensity" class="form-control" value="2.68" step="0.01" min="2.2" max="3.0">
+                    <span class="input-unit-badge">g/cm³</span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="inputGravelUnitWeight">Peso Volumétrico Seco Varillado (PVCS)</label>
+                  <div class="input-with-unit">
+                    <input type="number" id="inputGravelUnitWeight" class="form-control" value="1600" step="10" min="1200" max="1900">
+                    <span class="input-unit-badge">kg/m³</span>
+                  </div>
+                  <span class="helper-text">Compactado según ASTM C29</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="inputGravelAbsorption">Absorción</label>
+                  <div class="input-with-unit">
+                    <input type="number" id="inputGravelAbsorption" class="form-control" value="0.8" step="0.1" min="0" max="10">
+                    <span class="input-unit-badge">%</span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="inputGravelMoisture">Humedad Natural en Obra</label>
+                  <div class="input-with-unit">
+                    <input type="number" id="inputGravelMoisture" class="form-control" value="1.5" step="0.1" min="0" max="15">
+                    <span class="input-unit-badge">%</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Columna Derecha: Tarjeta Resumen Reactiva (Sticky en Desktop) -->
+        <div class="summary-column">
+          <div class="sticky-sidebar">
+
+            <div class="results-card">
+              <div class="results-header">
+                <div class="results-header-top">
+                  <h2>Resumen del Diseño ACI</h2>
+                  <span class="badge-aci">1 m³ Concreto</span>
+                </div>
+
+                <!-- Proporción en Peso Corregido (Húmedo para obra) -->
+                <div class="proportions-hero">
+                  <div class="title">Proporción en Obra (Cemento : Arena : Grava / Agua)</div>
+                  <div class="ratio-value" id="resRatioWet">1 : 2.30 : 2.91 / 0.49</div>
+                  <div style="font-size: 0.72rem; opacity: 0.85; margin-top: 2px;">
+                    Seco de laboratorio: <span id="resRatioDry" style="font-weight:700;">1 : 2.21 : 2.87 / 0.57</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Métricas Principales en Grid -->
+              <div class="results-stats-grid">
+                
+                <div class="stat-item">
+                  <div class="stat-label">Resistencia Diseño f'cr</div>
+                  <div class="stat-value" id="resFcr">294 kg/cm²</div>
+                  <div class="stat-sub">Margen ACI incluido</div>
+                </div>
+
+                <div class="stat-item">
+                  <div class="stat-label">Relación a/c</div>
+                  <div class="stat-value" id="resWc">0.566</div>
+                  <div class="stat-sub" id="resWcGov">(Por Resistencia)</div>
+                </div>
+
+                <div class="stat-item">
+                  <div class="stat-label">Cemento Total</div>
+                  <div class="stat-value" id="resCement">351.6 kg</div>
+                  <div class="stat-sub" id="resBags">8.27 bolsas de 42.5 kg</div>
+                </div>
+
+                <div class="stat-item">
+                  <div class="stat-label">Agua Neta a Añadir</div>
+                  <div class="stat-value" id="resEffectiveWater">172.5 L</div>
+                  <div class="stat-sub" id="resDesignWater">199.0 L (diseño)</div>
+                </div>
+
+              </div>
+
+              <!-- Alerta de Durabilidad -->
+              <div id="durabilityAlertBox" class="alert alert-warning" style="display:none; margin: 0.75rem 1.25rem 0;"></div>
+
+              <!-- Tabla de Materiales Unitarios por m³ -->
+              <div style="padding: 1rem 1.25rem 0.5rem;">
+                <h4 style="font-size: 0.825rem; font-weight:700; text-transform:uppercase; color:var(--text-muted); margin-bottom:0.5rem;">
+                  Cantidades para 1 m³ de concreto
+                </h4>
+                
+                <div class="table-responsive">
+                  <table class="mix-table">
+                    <thead>
+                      <tr>
+                        <th>Material</th>
+                        <th style="text-align:right;">Peso Seco (kg)</th>
+                        <th style="text-align:right;">Vol. Abs. (m³)</th>
+                        <th style="text-align:right;">Corregido (kg)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <span class="material-tag">
+                            <span class="material-dot dot-cement"></span> Cemento
+                          </span>
+                        </td>
+                        <td style="text-align:right;" id="tblCemDry">351.6</td>
+                        <td style="text-align:right;" id="tblCemVol">0.1116</td>
+                        <td style="text-align:right; font-weight:700;" id="tblCemWet">351.6</td>
+                      </tr>
+
+                      <tr>
+                        <td>
+                          <span class="material-tag">
+                            <span class="material-dot dot-water"></span> Agua
+                          </span>
+                        </td>
+                        <td style="text-align:right;" id="tblWaterDry">199.0</td>
+                        <td style="text-align:right;" id="tblWaterVol">0.1990</td>
+                        <td style="text-align:right; font-weight:700; color:var(--primary);" id="tblWaterWet">172.5 L</td>
+                      </tr>
+
+                      <tr>
+                        <td>
+                          <span class="material-tag">
+                            <span class="material-dot dot-air"></span> Aire
+                          </span>
+                        </td>
+                        <td style="text-align:right;">-</td>
+                        <td style="text-align:right;" id="tblAirVol">0.0200</td>
+                        <td style="text-align:right; color:var(--text-muted);" id="tblAirPct">2.0%</td>
+                      </tr>
+
+                      <tr>
+                        <td>
+                          <span class="material-tag">
+                            <span class="material-dot dot-sand"></span> Arena
+                          </span>
+                        </td>
+                        <td style="text-align:right;" id="tblSandDry">777.2</td>
+                        <td style="text-align:right;" id="tblSandVol">0.2933</td>
+                        <td style="text-align:right; font-weight:700;" id="tblSandWet">808.3</td>
+                      </tr>
+
+                      <tr>
+                        <td>
+                          <span class="material-tag">
+                            <span class="material-dot dot-gravel"></span> Grava
+                          </span>
+                        </td>
+                        <td style="text-align:right;" id="tblGravelDry">1008.0</td>
+                        <td style="text-align:right;" id="tblGravelVol">0.3761</td>
+                        <td style="text-align:right; font-weight:700;" id="tblGravelWet">1023.1</td>
+                      </tr>
+
+                      <tr class="row-highlight">
+                        <td><strong>TOTAL</strong></td>
+                        <td style="text-align:right;" id="tblTotalDry">2335.8</td>
+                        <td style="text-align:right;" id="tblTotalVol">1.0000</td>
+                        <td style="text-align:right;" id="tblTotalWet">2355.5 kg</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Botones de Acción en el resumen -->
+              <div style="padding: 1rem 1.25rem; display:flex; flex-direction:column; gap:0.5rem;">
+                <button id="btnSaveProject" class="btn btn-primary btn-block">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                  <span>Guardar Mezcla Actual</span>
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- PESTAÑA 2: DOSIFICACIÓN EN OBRA (TROMPO, BALDES, BOLSA)            -->
+    <!-- ================================================================= -->
+    <div id="tab-site" class="tab-panel">
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <div class="card-header">
+          <div class="card-title-group">
+            <h2 class="card-title">Dosificación Práctica para Obra y Cuadrilla</h2>
+          </div>
+          <div class="card-badge">Ajustado por Humedad Real</div>
+        </div>
+        <div class="card-body">
+          <p style="color:var(--text-muted); margin-bottom:1.25rem;">
+            Cantidades calculadas tomando en cuenta la humedad natural de los agregados en campo para evitar alterar la relación agua/cemento y la resistencia del concreto.
+          </p>
+
+          <!-- Configuradores de Tanda y Recipiente -->
+          <div class="form-grid" style="margin-bottom: 1.5rem; background:var(--bg-card-subtle); padding:1rem; border-radius:var(--radius-md);">
+            <div class="form-group">
+              <label for="inputBatchVolume">Volumen de Tanda para Mezcladora (m³)</label>
+              <div class="input-with-unit">
+                <input type="number" id="inputBatchVolume" class="form-control" value="0.15" step="0.01" min="0.01" max="10">
+                <span class="input-unit-badge">m³</span>
+              </div>
+              <span class="helper-text">Capacidad típica de trompito de 9 a 11 pies³: ~0.15 m³</span>
+            </div>
+
+            <div class="form-group">
+              <label for="inputBucketVolume">Capacidad de Balde / Lata de Medida</label>
+              <div class="input-with-unit">
+                <input type="number" id="inputBucketVolume" class="form-control" value="19" step="0.5" min="5" max="50">
+                <span class="input-unit-badge">Litros</span>
+              </div>
+              <span class="helper-text">Balde común de pintura: 19 Litros (5 galones) o 18 Litros</span>
+            </div>
+          </div>
+
+          <!-- Cajas de Dosificación -->
+          <div class="site-batch-grid">
+
+            <!-- Caja 1: Por 1 Bolsa de Cemento -->
+            <div class="site-batch-box highlight">
+              <div class="site-batch-header">
+                <h3 class="site-batch-title" id="siteBagWeightTitle">Por 1 Bolsa de Cemento (42.5 kg)</h3>
+                <span class="badge-aci">Patrón de Obra</span>
+              </div>
+
+              <div class="batch-metric-list">
+                <div class="batch-metric-row">
+                  <span class="batch-metric-name">Cemento:</span>
+                  <span class="batch-metric-val" id="siteBagCement">42.5 kg (1 bolsa)</span>
+                </div>
+                <div class="batch-metric-row">
+                  <span class="batch-metric-name">Arena húmeda:</span>
+                  <span class="batch-metric-val" id="siteBagSandWet">97.7 kg (3.4 baldes)</span>
+                </div>
+                <div class="batch-metric-row">
+                  <span class="batch-metric-name">Grava húmeda:</span>
+                  <span class="batch-metric-val" id="siteBagGravelWet">123.7 kg (4.5 baldes)</span>
+                </div>
+                <div class="batch-metric-row">
+                  <span class="batch-metric-name">Agua efectiva:</span>
+                  <span class="batch-metric-val" style="color:var(--primary);" id="siteBagWater">20.9 Litros (1.1 baldes)</span>
+                </div>
+                <div class="batch-metric-row">
+                  <span class="batch-metric-name">Proporción Peso:</span>
+                  <span class="batch-metric-val" id="siteBagRatio">1 : 2.30 : 2.91</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Caja 2: Por Tanda de Trompito / Mezcladora -->
+            <div class="site-batch-box">
+              <div class="site-batch-header">
+                <h3 class="site-batch-title" id="siteBatchVolTitle">Tanda Mezcladora (0.15 m³)</h3>
+                <span class="card-badge">Trompito</span>
+              </div>
+
+              <div class="batch-metric-list">
+                <div class="batch-metric-row">
+                  <span class="batch-metric-name">Cemento:</span>
+                  <span class="batch-metric-val" id="siteBatchCement">52.7 kg (~1.2 bolsas)</span>
+                </div>
+                <div class="batch-metric-row">
+                  <span class="batch-metric-name">Arena húmeda:</span>
+                  <span class="batch-metric-val" id="siteBatchSand">121.2 kg (~4.2 baldes)</span>
+                </div>
+                <div class="batch-metric-row">
+                  <span class="batch-metric-name">Grava húmeda:</span>
+                  <span class="batch-metric-val" id="siteBatchGravel">153.5 kg (~5.6 baldes)</span>
+                </div>
+                <div class="batch-metric-row">
+                  <span class="batch-metric-name">Agua efectiva:</span>
+                  <span class="batch-metric-val" style="color:var(--primary);" id="siteBatchWater">25.9 Litros (~1.4 baldes)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Caja 3: Por 1 m³ Completo -->
+            <div class="site-batch-box">
+              <div class="site-batch-header">
+                <h3 class="site-batch-title">Por Metro Cúbico (1.0 m³)</h3>
+                <span class="card-badge">Planta / Mixer</span>
+              </div>
+
+              <div class="batch-metric-list">
+                <div class="batch-metric-row">
+                  <span class="batch-metric-name">Cemento:</span>
+                  <span class="batch-metric-val" id="siteM3Cement">351.6 kg (8.27 bolsas)</span>
+                </div>
+                <div class="batch-metric-row">
+                  <span class="batch-metric-name">Arena húmeda:</span>
+                  <span class="batch-metric-val" id="siteM3Sand">808.3 kg</span>
+                </div>
+                <div class="batch-metric-row">
+                  <span class="batch-metric-name">Grava húmeda:</span>
+                  <span class="batch-metric-val" id="siteM3Gravel">1023.1 kg</span>
+                </div>
+                <div class="batch-metric-row">
+                  <span class="batch-metric-name">Agua efectiva:</span>
+                  <span class="batch-metric-val" style="color:var(--primary);" id="siteM3Water">172.5 Litros</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- PESTAÑA 3: MEMORIA DE CÁLCULO PASO A PASO (ACI 211.1)             -->
+    <!-- ================================================================= -->
+    <div id="tab-memory" class="tab-panel">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+        <div>
+          <h2 style="font-size:1.2rem; font-weight:800;">Memoria de Cálculo Técnico</h2>
+          <p style="font-size:0.8rem; color:var(--text-muted);">Sustentación matemática paso a paso según ACI 211.1 y ACI 318</p>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="window.print()">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+          <span>Imprimir Memoria</span>
+        </button>
+      </div>
+
+      <div id="calcMemoryContainer">
+        <!-- Generado dinámicamente con fórmulas por app.js -->
+      </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- PESTAÑA 4: GRÁFICOS & DISTRIBUCIÓN                                -->
+    <!-- ================================================================= -->
+    <div id="tab-charts" class="tab-panel">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Distribución Volumétrica y de Peso en 1 m³</h2>
+          <div class="card-badge">Gráficos Vectoriales</div>
+        </div>
+        <div class="card-body">
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:1.5rem;">
+            
+            <!-- Gráfico 1: Torta de Volúmenes Absolutos -->
+            <div class="chart-container">
+              <h3 style="font-size: 0.95rem; font-weight:700; margin-bottom:1rem; text-align:center;">
+                Composición Volumétrica Absoluta (1.0 m³)
+              </h3>
+              <div id="svgPieChart"></div>
+              
+              <div class="chart-legend">
+                <span class="legend-item"><span class="material-dot dot-cement"></span> Cemento</span>
+                <span class="legend-item"><span class="material-dot dot-water"></span> Agua</span>
+                <span class="legend-item"><span class="material-dot dot-air"></span> Aire</span>
+                <span class="legend-item"><span class="material-dot dot-sand"></span> Arena</span>
+                <span class="legend-item"><span class="material-dot dot-gravel"></span> Grava</span>
+              </div>
+            </div>
+
+            <!-- Gráfico 2: Barras Seco vs Húmedo -->
+            <div class="chart-container">
+              <h3 style="font-size: 0.95rem; font-weight:700; margin-bottom:1rem; text-align:center;">
+                Comparativa de Pesos: Seco vs Corregido por Humedad (kg)
+              </h3>
+              <div id="svgBarChart"></div>
+
+              <div class="chart-legend">
+                <span class="legend-item"><span class="material-dot" style="background:#94a3b8;"></span> Peso Seco Lab</span>
+                <span class="legend-item"><span class="material-dot" style="background:#2563eb;"></span> Peso Húmedo Obra</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- PESTAÑA 5: MIS PROYECTOS Y EXPORTACIÓN                            -->
+    <!-- ================================================================= -->
+    <div id="tab-projects" class="tab-panel">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Gestión de Diseños y Copias de Seguridad</h2>
+          <div class="card-badge">Offline LocalStorage</div>
+        </div>
+        <div class="card-body">
+          <p style="color:var(--text-muted); margin-bottom:1.25rem;">
+            Tus mezclas se guardan de forma permanente en tu dispositivo. Puedes exportarlas a un archivo JSON para abrirlas en otro celular o PC.
+          </p>
+
+          <div style="display:flex; gap:0.75rem; flex-wrap:wrap; margin-bottom:1.5rem;">
+            <button id="btnExportJson" class="btn btn-outline btn-sm">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span>Exportar Respaldo (JSON)</span>
+            </button>
+
+            <label class="btn btn-outline btn-sm" style="cursor:pointer;">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span>Importar Respaldo</span>
+              <input type="file" id="fileImportJson" accept=".json" style="display:none;">
+            </label>
+          </div>
+
+          <h3 style="font-size:0.9rem; font-weight:700; margin-bottom:0.75rem; border-bottom:1px solid var(--border-color); padding-bottom:0.4rem;">
+            Mezclas Guardadas en Este Dispositivo
+          </h3>
+          <div id="savedProjectsList">
+            <!-- Poblado dinámicamente -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- PESTAÑA 6: TABLAS DE REFERENCIA ACI 211.1                         -->
+    <!-- ================================================================= -->
+    <div id="tab-tables" class="tab-panel">
+      
+      <!-- Tabla 6.3.1 -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Tabla 6.3.1: Revenimientos Recomendados para Construcción</h2>
+          <div class="card-badge">ACI 211.1</div>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="mix-table">
+              <thead>
+                <tr>
+                  <th>Tipo de Construcción</th>
+                  <th>Revenimiento Máximo (cm)</th>
+                  <th>Revenimiento Mínimo (cm)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Muros de cimentación y zapatas reforzadas</td>
+                  <td>7.5 cm (3")</td>
+                  <td>2.5 cm (1")</td>
+                </tr>
+                <tr>
+                  <td>Zapatas simples, cajones y subestructuras</td>
+                  <td>7.5 cm (3")</td>
+                  <td>2.5 cm (1")</td>
+                </tr>
+                <tr>
+                  <td>Vigas y muros armados</td>
+                  <td>10.0 cm (4")</td>
+                  <td>2.5 cm (1")</td>
+                </tr>
+                <tr>
+                  <td>Columnas de edificios</td>
+                  <td>10.0 cm (4")</td>
+                  <td>2.5 cm (1")</td>
+                </tr>
+                <tr>
+                  <td>Pavimentos y losas de piso</td>
+                  <td>7.5 cm (3")</td>
+                  <td>2.5 cm (1")</td>
+                </tr>
+                <tr>
+                  <td>Concreto masivo</td>
+                  <td>5.0 cm (2")</td>
+                  <td>2.5 cm (1")</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla 6.3.6 -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Tabla 6.3.6: Volumen de Agregado Grueso por Unidad de Volumen (b/b0)</h2>
+          <div class="card-badge">ACI 211.1</div>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="mix-table">
+              <thead>
+                <tr>
+                  <th>TMN Agregado Grueso</th>
+                  <th>MF Arena = 2.40</th>
+                  <th>MF Arena = 2.60</th>
+                  <th>MF Arena = 2.80</th>
+                  <th>MF Arena = 3.00</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>3/8" (9.5 mm)</td><td>0.50</td><td>0.48</td><td>0.46</td><td>0.44</td></tr>
+                <tr><td>1/2" (12.5 mm)</td><td>0.59</td><td>0.57</td><td>0.55</td><td>0.53</td></tr>
+                <tr><td>3/4" (19.0 mm)</td><td>0.66</td><td>0.64</td><td>0.62</td><td>0.60</td></tr>
+                <tr><td>1" (25.0 mm)</td><td>0.71</td><td>0.69</td><td>0.67</td><td>0.65</td></tr>
+                <tr><td>1 1/2" (37.5 mm)</td><td>0.75</td><td>0.73</td><td>0.71</td><td>0.69</td></tr>
+                <tr><td>2" (50.0 mm)</td><td>0.78</td><td>0.76</td><td>0.74</td><td>0.72</td></tr>
+                <tr><td>3" (75.0 mm)</td><td>0.82</td><td>0.80</td><td>0.78</td><td>0.76</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Modal para Conectar Celular / Código QR -->
+  <div class="modal-overlay" id="mobileModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="font-size:1.1rem; font-weight:800; display:flex; align-items:center; gap:0.5rem;">
+          <span>📱</span> Usar en tu Teléfono Móvil
+        </h3>
+        <button class="modal-close" id="btnCloseMobileModal">&times;</button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <p style="font-size:0.875rem; color:#475569; margin-bottom:1rem;">
+          Asegúrate de que tu celular esté conectado a la <strong>misma red Wi-Fi</strong> que tu PC. Luego escanea este código o escribe la dirección en el navegador de tu teléfono:
+        </p>
+
+        <div style="background:#f8fafc; border:2px dashed #cbd5e1; border-radius:12px; padding:1.25rem; display:inline-block; margin-bottom:1rem;">
+          <img id="qrCodeImage" src="" alt="Código QR para celular" style="width:190px; height:190px; display:block; margin:0 auto; border-radius:8px;">
+        </div>
+
+        <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:0.6rem 1rem; margin-bottom:1.25rem; word-break:break-all;">
+          <span style="font-size:0.75rem; color:#1e40af; font-weight:700; display:block;">DIRECCIÓN EN TU RED WI-FI:</span>
+          <strong id="mobileUrlDisplay" style="font-size:1.1rem; color:#1d4ed8;">http://192.168.0.42:3000</strong>
+        </div>
+
+        <div style="text-align:left; background:#f1f5f9; border-radius:10px; padding:1rem; font-size:0.85rem;">
+          <h4 style="font-weight:700; margin-bottom:0.5rem; color:#0f172a;">¿Cómo instalarla como App en tu celular?</h4>
+          <ul style="padding-left:1.2rem; color:#334155; display:flex; flex-direction:column; gap:0.35rem;">
+            <li><strong>En Android (Chrome / Brave / Edge):</strong> Toca los 3 puntos superiores y selecciona <em>"Agregar a la pantalla principal"</em> o <em>"Instalar aplicación"</em>.</li>
+            <li><strong>En iPhone / iPad (Safari):</strong> Toca el botón de Compartir (<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>) y selecciona <em>"Añadir a pantalla de inicio"</em>.</li>
+            <li><strong>¡Listo!</strong> La app se abrirá a pantalla completa y funcionará sin conexión a internet en obra.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barra Rápida Flotante para Celular (Mobile Quickbar) -->
+  <div class="mobile-quickbar" id="mobileQuickbar">
+    <div class="quickbar-info">
+      <span class="quickbar-title">Proporción en Obra (Corregida)</span>
+      <span class="quickbar-ratio" id="quickbarRatio">1 : 2.30 : 2.91</span>
+    </div>
+    <div style="text-align:right;">
+      <span id="quickbarCement" style="font-size:0.75rem; color:#cbd5e1; font-weight:600; display:block;">351.6 kg/m³</span>
+      <span style="font-size:0.65rem; color:var(--accent); font-weight:700;">Ver Dosificación &rarr;</span>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/aci-data.js"></script>
+  <script src="js/calculator.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
