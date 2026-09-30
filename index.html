@@ -11,11 +11,903 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Mezclas ACI">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="apple-touch-icon" href="icons/icon-192.svg">
-  <link rel="icon" type="image/svg+xml" href="icons/icon-192.svg">
+  <link rel="apple-touch-icon" href="icon-192.svg">
+  <link rel="icon" type="image/svg+xml" href="icon-192.svg">
 
   <!-- Estilos principales -->
-  <link rel="stylesheet" href="css/styles.css">
+<style>
+/* ==========================================================================
+   CALCULADORA DE MEZCLAS ACI 211.1 - ESTILOS PROFESIONALES
+   Diseño responsivo móvil y escritorio, soporte offline y modo impresión
+   ========================================================================== */
+
+:root {
+  --primary: #1d4ed8;
+  --primary-hover: #1e40af;
+  --primary-light: #eff6ff;
+  --primary-border: #bfdbfe;
+  --accent: #f59e0b;
+  --accent-hover: #d97706;
+  --accent-light: #fef3c7;
+  --success: #10b981;
+  --success-light: #ecfdf5;
+  --danger: #ef4444;
+  --danger-light: #fef2f2;
+  --warning: #f59e0b;
+  
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-card-subtle: #f1f5f9;
+  --border-color: #e2e8f0;
+  --border-focus: #3b82f6;
+
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+  --text-inverse: #ffffff;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Base & Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  line-height: 1.5;
+  font-size: 15px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header & Navbar */
+.app-header {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border-bottom: 3px solid var(--accent);
+}
+
+.header-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.brand-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.brand-titles h1 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.brand-titles .subtitle {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.badge-aci {
+  background: var(--accent);
+  color: #000;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* Navigation Tabs */
+.nav-tabs-wrapper {
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.nav-tabs {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  padding: 0 0.5rem;
+  gap: 0.25rem;
+}
+
+.nav-tab {
+  background: transparent;
+  color: #94a3b8;
+  border: none;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.nav-tab:hover {
+  color: #f1f5f9;
+}
+
+.nav-tab.active {
+  color: #ffffff;
+  border-bottom-color: var(--accent);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Layout Main Container */
+.main-content {
+  flex: 1;
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.25rem 1rem;
+}
+
+/* Tab Panels */
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+  animation: fadeIn 0.25s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Two-column Grid for Desktop */
+.calc-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .calc-grid {
+    grid-template-columns: 1.35fr 1fr;
+    align-items: start;
+  }
+
+  .sticky-sidebar {
+    position: sticky;
+    top: 90px;
+  }
+}
+
+/* Card Components */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 1.25rem;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.card:hover {
+  border-color: #cbd5e1;
+}
+
+.card-header {
+  padding: 0.875rem 1.25rem;
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.step-number {
+  background: var(--primary);
+  color: white;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.card-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  background: var(--bg-card-subtle);
+  color: var(--text-muted);
+}
+
+.card-body {
+  padding: 1.25rem;
+}
+
+/* Form Controls & Inputs */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-group label {
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form-control, .form-select {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.95rem;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background-color: #ffffff;
+  color: var(--text-main);
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.form-control:focus, .form-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.input-with-unit {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-unit .form-control {
+  padding-right: 4.2rem;
+  font-weight: 600;
+}
+
+.input-unit-badge {
+  position: absolute;
+  right: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-card-subtle);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  pointer-events: none;
+  border: 1px solid var(--border-color);
+}
+
+.helper-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Radio / Checkbox Cards */
+.radio-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.radio-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 0.6rem 0.75rem;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  background: white;
+}
+
+.radio-card input {
+  position: absolute;
+  opacity: 0;
+}
+
+.radio-card:hover {
+  border-color: var(--primary-border);
+  background: var(--primary-light);
+}
+
+.radio-card.selected {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+
+.radio-card-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.radio-card-desc {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.btn-accent {
+  background: var(--accent);
+  color: #0f172a;
+  font-weight: 700;
+}
+.btn-accent:hover {
+  background: var(--accent-hover);
+}
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--border-color);
+  color: var(--text-main);
+}
+.btn-outline:hover {
+  background: var(--bg-card-subtle);
+}
+
+.btn-outline-white {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: white;
+}
+.btn-outline-white:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.btn-sm {
+  padding: 0.35rem 0.7rem;
+  font-size: 0.775rem;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+/* Results & Summary Cards */
+.results-card {
+  background: white;
+  border: 2px solid var(--primary-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.results-header {
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  color: white;
+  padding: 1.25rem;
+}
+
+.results-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.results-header h2 {
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.proportions-hero {
+  background: rgba(255, 255, 255, 0.12);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  margin-top: 0.75rem;
+  text-align: center;
+}
+
+.proportions-hero .title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.85;
+}
+
+.proportions-hero .ratio-value {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #fef08a;
+  margin-top: 2px;
+}
+
+.results-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: var(--bg-card-subtle);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.stat-item {
+  background: white;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.stat-label {
+  font-size: 0.725rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-top: 2px;
+}
+
+.stat-sub {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* Material Breakdown Table */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mix-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.875rem;
+}
+
+.mix-table th {
+  background: #f8fafc;
+  padding: 0.65rem 0.85rem;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1.5px solid var(--border-color);
+}
+
+.mix-table td {
+  padding: 0.7rem 0.85rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-main);
+}
+
+.mix-table tr:last-child td {
+  border-bottom: none;
+}
+
+.mix-table .row-highlight {
+  background: #f8fafc;
+  font-weight: 700;
+}
+
+.material-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+
+.material-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.dot-cement { background: #64748b; }
+.dot-water { background: #0284c7; }
+.dot-sand { background: #d97706; }
+.dot-gravel { background: #475569; }
+.dot-air { background: #94a3b8; }
+
+/* Alerts & Banners */
+.alert {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.825rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.alert-warning {
+  background: var(--accent-light);
+  border: 1px solid #fde68a;
+  color: #92400e;
+}
+
+.alert-info {
+  background: var(--primary-light);
+  border: 1px solid var(--primary-border);
+  color: #1e40af;
+}
+
+/* Step Calculation Memory Styling */
+.memory-step {
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.memory-step-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.memory-step-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.formula-box {
+  background: #f8fafc;
+  border-left: 4px solid var(--primary);
+  padding: 0.75rem 1rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85rem;
+  color: #0f172a;
+  margin: 0.5rem 0;
+  overflow-x: auto;
+}
+
+/* Pure SVG Charts */
+.chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+  background: white;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+/* Site Batching Calculator Card */
+.site-batch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.site-batch-box {
+  background: white;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.site-batch-box.highlight {
+  border-color: var(--accent);
+  background: #fffbeb;
+}
+
+.site-batch-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-batch-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.batch-metric-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.batch-metric-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px dashed var(--border-color);
+}
+
+.batch-metric-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.batch-metric-name {
+  color: var(--text-muted);
+}
+
+.batch-metric-val {
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+/* Mobile Quick Bar (bottom sheet / floating bar) */
+.mobile-quickbar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #0f172a;
+  color: white;
+  padding: 0.6rem 1rem;
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.25);
+  z-index: 99;
+  border-top: 2px solid var(--accent);
+}
+
+@media (max-width: 1023px) {
+  .mobile-quickbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  body {
+    padding-bottom: 60px; /* Space for bottom quickbar */
+  }
+}
+
+.quickbar-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.quickbar-title {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.quickbar-ratio {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fef08a;
+}
+
+/* Modal Styling */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-card {
+  background: white;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.modal-body {
+  padding: 1.25rem;
+}
+
+/* Print Optimization */
+@media print {
+  .app-header,
+  .nav-tabs-wrapper,
+  .mobile-quickbar,
+  .btn,
+  .card-header .btn,
+  .header-actions {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+    color: black;
+    font-size: 12pt;
+    padding: 0;
+    margin: 0;
+  }
+
+  .main-content {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .calc-grid {
+    display: block;
+  }
+
+  .card {
+    border: 1px solid #ccc;
+    box-shadow: none;
+    page-break-inside: avoid;
+    margin-bottom: 1rem;
+  }
+
+  .tab-panel {
+    display: block !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .print-header {
+    display: block !important;
+    text-align: center;
+    border-bottom: 2px solid #000;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+}
+
+.print-only {
+  display: none;
+}
+
+</style>
 </head>
 <body>
 
@@ -23,7 +915,7 @@
   <header class="app-header">
     <div class="header-container">
       <div class="brand-wrapper">
-        <img src="icons/icon-192.svg" alt="Logo ACI" class="brand-icon">
+        <img src="icon-192.svg" onerror="this.onerror=null; this.src='icons/icon-192.svg'" alt="Logo ACI" class="brand-icon">
         <div class="brand-titles">
           <h1>Calculadora de Mezclas <span class="badge-aci">ACI 211.1</span></h1>
           <div class="subtitle">
@@ -934,9 +1826,1621 @@
     </div>
   </div>
 
-  <!-- Scripts -->
-  <script src="js/aci-data.js"></script>
-  <script src="js/calculator.js"></script>
-  <script src="js/app.js"></script>
+  <!-- Inline Bundled Scripts -->
+  <script>
+/**
+ * ACI DATA & TABLES
+ * Tablas normalizadas según ACI 211.1 y ACI 318
+ */
+
+const ACI_DATA = {
+  // Tabla 6.3.1: Revenimientos recomendados para varios tipos de construcción
+  slumpPresets: [
+    { id: 'vigas_columnas', label: 'Vigas y columnas de edificios', min: 2.5, max: 10.0, default: 7.5, minIn: 1, maxIn: 4 },
+    { id: 'muros_zapatas', label: 'Muros de cimentación y zapatas reforzadas', min: 2.5, max: 7.5, default: 5.0, minIn: 1, maxIn: 3 },
+    { id: 'zapatas_simples', label: 'Zapatas simples, cajones y subestructuras', min: 2.5, max: 7.5, default: 5.0, minIn: 1, maxIn: 3 },
+    { id: 'pavimentos_losas', label: 'Pavimentos y losas de piso', min: 2.5, max: 7.5, default: 5.0, minIn: 1, maxIn: 3 },
+    { id: 'concreto_masivo', label: 'Concreto masivo', min: 2.5, max: 5.0, default: 3.5, minIn: 1, maxIn: 2 },
+    { id: 'custom', label: 'Personalizado...', min: 2.0, max: 18.0, default: 8.0, minIn: 1, maxIn: 7 }
+  ],
+
+  // Tamaños Máximos Nominales (TMN)
+  tmnOptions: [
+    { id: '3/8', label: '3/8" (9.5 mm)', mm: 9.5, inches: 0.375 },
+    { id: '1/2', label: '1/2" (12.5 mm)', mm: 12.5, inches: 0.50 },
+    { id: '3/4', label: '3/4" (19.0 mm)', mm: 19.0, inches: 0.75 },
+    { id: '1', label: '1" (25.0 mm)', mm: 25.0, inches: 1.00 },
+    { id: '1_1/2', label: '1 1/2" (37.5 mm)', mm: 37.5, inches: 1.50 },
+    { id: '2', label: '2" (50.0 mm)', mm: 50.0, inches: 2.00 },
+    { id: '3', label: '3" (75.0 mm)', mm: 75.0, inches: 3.00 }
+  ],
+
+  // Tabla 6.3.3: Requisitos aproximados de agua de mezclado (kg/m3 o L/m3) y contenido de aire
+  waterAndAirTable: {
+    // Slump ranges:
+    // low: 2.5 - 5.0 cm (1 - 2 in)
+    // med: 7.5 - 10.0 cm (3 - 4 in)
+    // high: 15.0 - 18.0 cm (6 - 7 in)
+    nonAir: {
+      '3/8':   { low: 207, med: 228, high: 243, airPct: 3.0 },
+      '1/2':   { low: 199, med: 216, high: 231, airPct: 2.5 },
+      '3/4':   { low: 190, med: 205, high: 216, airPct: 2.0 },
+      '1':     { low: 179, med: 193, high: 202, airPct: 1.5 },
+      '1_1/2': { low: 166, med: 181, high: 187, airPct: 1.0 },
+      '2':     { low: 154, med: 169, high: 178, airPct: 0.5 },
+      '3':     { low: 130, med: 145, high: 160, airPct: 0.3 }
+    },
+    airEntrained: {
+      '3/8':   { low: 181, med: 202, high: 216, mildAir: 4.5, modAir: 6.0, sevAir: 7.5 },
+      '1/2':   { low: 175, med: 193, high: 205, mildAir: 4.0, modAir: 5.5, sevAir: 7.0 },
+      '3/4':   { low: 168, med: 184, high: 197, mildAir: 3.5, modAir: 5.0, sevAir: 6.0 },
+      '1':     { low: 160, med: 175, high: 184, mildAir: 3.0, modAir: 4.5, sevAir: 6.0 },
+      '1_1/2': { low: 150, med: 165, high: 174, mildAir: 2.5, modAir: 4.5, sevAir: 5.5 },
+      '2':     { low: 142, med: 157, high: 166, mildAir: 2.0, modAir: 4.0, sevAir: 5.0 },
+      '3':     { low: 122, med: 133, high: 154, mildAir: 1.5, modAir: 3.5, sevAir: 4.5 }
+    }
+  },
+
+  // Tabla 6.3.4(a): Correspondencia entre relación agua/cemento y resistencia a la compresión (28 días)
+  wcStrengthPoints: [
+    { fcMpa: 45, fcKg: 459, nonAirWc: 0.38, airWc: 0.30 },
+    { fcMpa: 40, fcKg: 408, nonAirWc: 0.43, airWc: 0.35 },
+    { fcMpa: 35, fcKg: 357, nonAirWc: 0.48, airWc: 0.40 },
+    { fcMpa: 30, fcKg: 306, nonAirWc: 0.55, airWc: 0.46 },
+    { fcMpa: 25, fcKg: 255, nonAirWc: 0.62, airWc: 0.53 },
+    { fcMpa: 20, fcKg: 204, nonAirWc: 0.70, airWc: 0.61 },
+    { fcMpa: 15, fcKg: 153, nonAirWc: 0.80, airWc: 0.71 }
+  ],
+
+  // Tabla ACI 318 / 211 Durabilidad
+  durabilityConditions: [
+    { id: 'none', label: 'Condición normal (Sin exposición severa)', maxWc: 1.0, minFcKg: 0, desc: 'Estructuras protegidas en interiores o sin agresividad química' },
+    { id: 'f1_freeze', label: 'Congelación y deshielo (Humedad moderada)', maxWc: 0.55, minFcKg: 210, desc: 'Expuesto a ciclos de congelamiento y deshielo ocasional' },
+    { id: 'f2_freeze_sat', label: 'Congelación severa (Saturación continua)', maxWc: 0.45, minFcKg: 280, desc: 'En contacto continuo con humedad antes de congelación' },
+    { id: 'f3_deicing', label: 'Congelación con sales descongelantes', maxWc: 0.45, minFcKg: 350, desc: 'Pavimentos y puentes con uso de cloruros para nieve' },
+    { id: 's1_sulfate_mod', label: 'Sulfatos moderados (150-1500 ppm SO4 / Agua de mar)', maxWc: 0.50, minFcKg: 280, desc: 'Suelos moderadamente agresivos o contacto con agua salada' },
+    { id: 's2_sulfate_sev', label: 'Sulfatos severos (1500-10000 ppm SO4)', maxWc: 0.45, minFcKg: 315, desc: 'Suelos con alto contenido de yeso o aguas residuales agresivas' },
+    { id: 's3_sulfate_vsev', label: 'Sulfatos muy severos (> 10000 ppm SO4)', maxWc: 0.45, minFcKg: 350, desc: 'Ambientes industriales extremos (Cemento Tipo V + puzolana)' },
+    { id: 'w1_low_perm', label: 'Baja permeabilidad requerida (Tanques / Piscinas)', maxWc: 0.50, minFcKg: 280, desc: 'Estructuras en contacto permanente con agua a presión' },
+    { id: 'c2_chlorides', label: 'Protección contra corrosión por cloruros', maxWc: 0.40, minFcKg: 350, desc: 'Estructuras marinas o expuestas a sales agresivas' }
+  ],
+
+  // Tabla 6.3.6: Volumen de agregado grueso seco y varillado por unidad de volumen de concreto (b / b0)
+  // según el Módulo de Finura (MF) de la arena
+  coarseAggregateVolumeTable: {
+    finenessModuli: [2.40, 2.60, 2.80, 3.00],
+    ratios: {
+      '3/8':   [0.50, 0.48, 0.46, 0.44],
+      '1/2':   [0.59, 0.57, 0.55, 0.53],
+      '3/4':   [0.66, 0.64, 0.62, 0.60],
+      '1':     [0.71, 0.69, 0.67, 0.65],
+      '1_1/2': [0.75, 0.73, 0.71, 0.69],
+      '2':     [0.78, 0.76, 0.74, 0.72],
+      '3':     [0.82, 0.80, 0.78, 0.76]
+    }
+  },
+
+  // Tabla 6.3.7.1: Primera estimación del peso del concreto fresco (kg/m3) para el Método por Peso
+  firstEstimateWeightTable: {
+    nonAir: {
+      '3/8': 2280, '1/2': 2310, '3/4': 2345, '1': 2380, '1_1/2': 2410, '2': 2445, '3': 2490
+    },
+    airEntrained: {
+      '3/8': 2190, '1/2': 2230, '3/4': 2275, '1': 2295, '1_1/2': 2350, '2': 2345, '3': 2405
+    }
+  },
+
+  // Mezclas de ejemplo precargadas para probar con 1 clic
+  examplePresets: [
+    {
+      name: 'Vigas y Columnas 210 kg/cm² (Estándar)',
+      fc: 210,
+      unit: 'kgcm2',
+      hasStandardDev: false,
+      stdDev: 0,
+      slumpPreset: 'vigas_columnas',
+      slumpValue: 8.0, // cm (~3.1 in)
+      tmn: '3/4',
+      airType: 'nonAir',
+      airExposure: 'mild',
+      durability: 'none',
+      useAdditive: false,
+      waterReductionPct: 0,
+      cementDensity: 3.15,
+      sandDensity: 2.65,
+      sandAbsorption: 1.5,
+      sandMoisture: 4.0,
+      sandFineness: 2.70,
+      gravelDensity: 2.68,
+      gravelAbsorption: 0.8,
+      gravelMoisture: 1.5,
+      gravelUnitWeight: 1600, // PVCS kg/m3
+      bagWeight: 42.5
+    },
+    {
+      name: 'Zapatas y Cimientos 175 kg/cm²',
+      fc: 175,
+      unit: 'kgcm2',
+      hasStandardDev: false,
+      stdDev: 0,
+      slumpPreset: 'muros_zapatas',
+      slumpValue: 6.0,
+      tmn: '1',
+      airType: 'nonAir',
+      airExposure: 'mild',
+      durability: 'none',
+      useAdditive: false,
+      waterReductionPct: 0,
+      cementDensity: 3.15,
+      sandDensity: 2.62,
+      sandAbsorption: 1.8,
+      sandMoisture: 3.5,
+      sandFineness: 2.80,
+      gravelDensity: 2.66,
+      gravelAbsorption: 1.0,
+      gravelMoisture: 1.2,
+      gravelUnitWeight: 1580,
+      bagWeight: 42.5
+    },
+    {
+      name: 'Pavimento Rígido 280 kg/cm² (Con Plastificante)',
+      fc: 280,
+      unit: 'kgcm2',
+      hasStandardDev: false,
+      stdDev: 0,
+      slumpPreset: 'pavimentos_losas',
+      slumpValue: 5.0,
+      tmn: '1_1/2',
+      airType: 'nonAir',
+      airExposure: 'mild',
+      durability: 'none',
+      useAdditive: true,
+      waterReductionPct: 10,
+      cementDensity: 3.15,
+      sandDensity: 2.66,
+      sandAbsorption: 1.2,
+      sandMoisture: 3.8,
+      sandFineness: 2.65,
+      gravelDensity: 2.70,
+      gravelAbsorption: 0.6,
+      gravelMoisture: 1.0,
+      gravelUnitWeight: 1650,
+      bagWeight: 50.0
+    },
+    {
+      name: 'Estructura Marina / Sulfatos 350 kg/cm² (Aire Incluido)',
+      fc: 350,
+      unit: 'kgcm2',
+      hasStandardDev: false,
+      stdDev: 0,
+      slumpPreset: 'vigas_columnas',
+      slumpValue: 8.0,
+      tmn: '3/4',
+      airType: 'airEntrained',
+      airExposure: 'modAir',
+      durability: 's2_sulfate_sev',
+      useAdditive: true,
+      waterReductionPct: 8,
+      cementDensity: 3.15,
+      sandDensity: 2.64,
+      sandAbsorption: 1.4,
+      sandMoisture: 4.2,
+      sandFineness: 2.75,
+      gravelDensity: 2.67,
+      gravelAbsorption: 0.7,
+      gravelMoisture: 1.3,
+      gravelUnitWeight: 1620,
+      bagWeight: 50.0
+    }
+  ]
+};
+
+// Interpolación lineal de 2 puntos
+function linearInterpolate(x, x0, x1, y0, y1) {
+  if (Math.abs(x1 - x0) < 1e-9) return y0;
+  return y0 + ((x - x0) / (x1 - x0)) * (y1 - y0);
+}
+
+// Obtener agua y aire según slump y TMN
+function getAciWaterAndAir(tmnKey, slumpCm, isAirEntrained, airExposure) {
+  const table = isAirEntrained ? ACI_DATA.waterAndAirTable.airEntrained : ACI_DATA.waterAndAirTable.nonAir;
+  const row = table[tmnKey] || table['3/4'];
+
+  // Slump:
+  // Low range center: 3.75 cm (1.5 in)
+  // Med range center: 8.75 cm (3.5 in)
+  // High range center: 16.5 cm (6.5 in)
+  let water;
+  if (slumpCm <= 5.0) {
+    if (slumpCm <= 2.5) {
+      water = row.low;
+    } else {
+      water = linearInterpolate(slumpCm, 2.5, 5.0, row.low, (row.low + row.med) / 2);
+    }
+  } else if (slumpCm <= 10.0) {
+    water = linearInterpolate(slumpCm, 5.0, 10.0, row.low, row.med);
+  } else if (slumpCm <= 17.5) {
+    water = linearInterpolate(slumpCm, 10.0, 17.5, row.med, row.high);
+  } else {
+    // Más de 17.5 cm
+    water = row.high + (slumpCm - 17.5) * 2.0;
+  }
+
+  // Contenido de aire
+  let airPct = 2.0;
+  if (!isAirEntrained) {
+    airPct = row.airPct;
+  } else {
+    if (airExposure === 'sevAir') airPct = row.sevAir;
+    else if (airExposure === 'modAir') airPct = row.modAir;
+    else airPct = row.mildAir;
+  }
+
+  return {
+    waterKg: Math.round(water * 10) / 10,
+    airPct: airPct,
+    baseWater: Math.round(water * 10) / 10
+  };
+}
+
+// Obtener relación a/c por resistencia según tabla 6.3.4(a)
+function getAciWcFromStrength(fcrKg, isAirEntrained) {
+  const points = ACI_DATA.wcStrengthPoints; // Ordenados descendentemente por fcKg (459 a 153)
+
+  // Si es mayor que el máximo de la tabla
+  if (fcrKg >= points[0].fcKg) {
+    return isAirEntrained ? points[0].airWc : points[0].nonAirWc;
+  }
+  // Si es menor que el mínimo de la tabla
+  if (fcrKg <= points[points.length - 1].fcKg) {
+    const last = points[points.length - 1];
+    return isAirEntrained ? last.airWc : last.nonAirWc;
+  }
+
+  // Encontrar el segmento donde cae fcrKg
+  for (let i = 0; i < points.length - 1; i++) {
+    const pUpper = points[i];
+    const pLower = points[i + 1];
+    if (fcrKg <= pUpper.fcKg && fcrKg >= pLower.fcKg) {
+      const yUpper = isAirEntrained ? pUpper.airWc : pUpper.nonAirWc;
+      const yLower = isAirEntrained ? pLower.airWc : pLower.nonAirWc;
+      const wc = linearInterpolate(fcrKg, pLower.fcKg, pUpper.fcKg, yLower, yUpper);
+      return Math.round(wc * 1000) / 1000;
+    }
+  }
+
+  return 0.50;
+}
+
+// Obtener volumen de grava (b / b0) según MF de la arena y TMN (Tabla 6.3.6)
+function getAciCoarseAggregateVolumeRatio(tmnKey, finenessModulus) {
+  const table = ACI_DATA.coarseAggregateVolumeTable;
+  const values = table.ratios[tmnKey] || table.ratios['3/4'];
+  const moduli = table.finenessModuli; // [2.40, 2.60, 2.80, 3.00]
+
+  // Limitar MF entre 2.40 y 3.00 si está fuera
+  const mf = Math.max(2.40, Math.min(3.00, finenessModulus));
+
+  for (let i = 0; i < moduli.length - 1; i++) {
+    if (mf >= moduli[i] && mf <= moduli[i + 1]) {
+      const ratio = linearInterpolate(mf, moduli[i], moduli[i + 1], values[i], values[i + 1]);
+      return Math.round(ratio * 1000) / 1000;
+    }
+  }
+
+  return values[2]; // default 2.80
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    ACI_DATA,
+    linearInterpolate,
+    getAciWaterAndAir,
+    getAciWcFromStrength,
+    getAciCoarseAggregateVolumeRatio
+  };
+}
+
+  </script>
+  <script>
+/**
+ * CALCULADORA DE DISEÑO DE MEZCLAS SEGÚN MÉTODO ACI 211.1
+ * Motor de cálculo de alta precisión con soporte para unidades métricas (kg/cm², MPa)
+ */
+
+class AciMixCalculator {
+  constructor(inputData) {
+    this.input = Object.assign({
+      fc: 210, // kg/cm2 o MPa según unit
+      unit: 'kgcm2', // 'kgcm2' o 'mpa'
+      hasStandardDev: false,
+      stdDev: 0,
+      slumpCm: 8.0,
+      slumpPreset: 'vigas_columnas',
+      tmn: '3/4', // clave TMN
+      isAirEntrained: false,
+      airExposure: 'mild',
+      durabilityId: 'none',
+      useAdditive: false,
+      waterReductionPct: 0,
+      
+      // Propiedades de los materiales
+      cementDensity: 3.15, // g/cm3 o kg/L
+      bagWeight: 42.5, // kg (42.5 o 50)
+      
+      sandDensity: 2.65, // Peso específico de masa (seco)
+      sandAbsorption: 1.5, // %
+      sandMoisture: 4.0, // %
+      sandFineness: 2.70, // Módulo de finura (MF)
+      
+      gravelDensity: 2.68, // Peso específico de masa (seco)
+      gravelAbsorption: 0.8, // %
+      gravelMoisture: 1.5, // %
+      gravelUnitWeight: 1600, // PVCS - Peso volumétrico compactado seco (kg/m3)
+      
+      // Parámetros de tanda en obra
+      batchVolumeM3: 0.15, // Volumen de tanda para mezcladora trompito (m3)
+      bucketVolumeLiters: 19 // Balde de obra estándar (19 L / 5 galones)
+    }, inputData);
+  }
+
+  calculate() {
+    const r = {}; // Resultados y memoria paso a paso
+
+    // ==========================================
+    // PASO 1: Resistencia de diseño (f'cr)
+    // ==========================================
+    const unitFactor = this.input.unit === 'mpa' ? 10.197 : 1.0; // 1 MPa = ~10.197 kg/cm2
+    const fcKg = this.input.unit === 'mpa' ? this.input.fc * 10.197 : this.input.fc;
+    const stdDevKg = this.input.unit === 'mpa' ? (this.input.stdDev || 0) * 10.197 : (this.input.stdDev || 0);
+
+    let fcrKg = fcKg;
+    let fcrFormula = '';
+    let fcrDetails = '';
+
+    if (this.input.hasStandardDev && stdDevKg > 0) {
+      if (fcKg <= 350) {
+        const fcr1 = fcKg + 1.34 * stdDevKg;
+        const fcr2 = fcKg + 2.33 * stdDevKg - 35;
+        fcrKg = Math.max(fcr1, fcr2);
+        fcrFormula = `f'cr = max(f'c + 1.34·s, f'c + 2.33·s - 35)`;
+        fcrDetails = `f'cr1 = ${fcKg.toFixed(1)} + 1.34·(${stdDevKg.toFixed(1)}) = ${fcr1.toFixed(1)} kg/cm²; f'cr2 = ${fcKg.toFixed(1)} + 2.33·(${stdDevKg.toFixed(1)}) - 35 = ${fcr2.toFixed(1)} kg/cm²`;
+      } else {
+        const fcr1 = fcKg + 1.34 * stdDevKg;
+        const fcr2 = 0.90 * fcKg + 2.33 * stdDevKg;
+        fcrKg = Math.max(fcr1, fcr2);
+        fcrFormula = `f'cr = max(f'c + 1.34·s, 0.90·f'c + 2.33·s)`;
+        fcrDetails = `f'cr1 = ${fcKg.toFixed(1)} + 1.34·(${stdDevKg.toFixed(1)}) = ${fcr1.toFixed(1)} kg/cm²; f'cr2 = 0.90·(${fcKg.toFixed(1)}) + 2.33·(${stdDevKg.toFixed(1)}) = ${fcr2.toFixed(1)} kg/cm²`;
+      }
+    } else {
+      // Sin desviación estándar (Tablas de incremento ACI 318 / 211)
+      if (fcKg < 210) {
+        fcrKg = fcKg + 70;
+        fcrFormula = `f'cr = f'c + 70 kg/cm² (f'c < 210)`;
+        fcrDetails = `${fcKg.toFixed(1)} + 70.0 = ${fcrKg.toFixed(1)} kg/cm²`;
+      } else if (fcKg <= 350) {
+        fcrKg = fcKg + 84;
+        fcrFormula = `f'cr = f'c + 84 kg/cm² (210 ≤ f'c ≤ 350)`;
+        fcrDetails = `${fcKg.toFixed(1)} + 84.0 = ${fcrKg.toFixed(1)} kg/cm²`;
+      } else {
+        fcrKg = 1.10 * fcKg + 50;
+        fcrFormula = `f'cr = 1.10·f'c + 50 kg/cm² (f'c > 350)`;
+        fcrDetails = `1.10·(${fcKg.toFixed(1)}) + 50.0 = ${fcrKg.toFixed(1)} kg/cm²`;
+      }
+    }
+
+    r.step1 = {
+      fcInput: this.input.fc,
+      unit: this.input.unit,
+      fcKg: Math.round(fcKg * 10) / 10,
+      fcMpa: Math.round((fcKg / 10.197) * 10) / 10,
+      fcrKg: Math.round(fcrKg * 10) / 10,
+      fcrMpa: Math.round((fcrKg / 10.197) * 10) / 10,
+      formula: fcrFormula,
+      details: fcrDetails
+    };
+
+    // ==========================================
+    // PASO 2: Asentamiento (Slump) y TMN
+    // ==========================================
+    const tmnObj = ACI_DATA.tmnOptions.find(t => t.id === this.input.tmn) || ACI_DATA.tmnOptions[2];
+    const slumpCm = parseFloat(this.input.slumpCm);
+    const slumpInches = Math.round((slumpCm / 2.54) * 10) / 10;
+
+    r.step2 = {
+      slumpCm: slumpCm,
+      slumpInches: slumpInches,
+      tmnKey: tmnObj.id,
+      tmnLabel: tmnObj.label,
+      tmnMm: tmnObj.mm
+    };
+
+    // ==========================================
+    // PASO 3: Agua de mezclado y Contenido de Aire
+    // ==========================================
+    const waterAirData = getAciWaterAndAir(
+      this.input.tmn,
+      slumpCm,
+      this.input.isAirEntrained,
+      this.input.airExposure
+    );
+
+    let designWater = waterAirData.waterKg;
+    let waterReductionLiters = 0;
+    if (this.input.useAdditive && this.input.waterReductionPct > 0) {
+      waterReductionLiters = (waterAirData.waterKg * this.input.waterReductionPct) / 100;
+      designWater = waterAirData.waterKg - waterReductionLiters;
+    }
+
+    r.step3 = {
+      baseWater: waterAirData.baseWater,
+      isAirEntrained: this.input.isAirEntrained,
+      airExposure: this.input.airExposure,
+      airPct: waterAirData.airPct,
+      useAdditive: this.input.useAdditive,
+      waterReductionPct: this.input.waterReductionPct,
+      waterReductionLiters: Math.round(waterReductionLiters * 10) / 10,
+      designWater: Math.round(designWater * 10) / 10 // L/m3 o kg/m3
+    };
+
+    // ==========================================
+    // PASO 4: Relación Agua/Cemento (a/c)
+    // ==========================================
+    const wcStrength = getAciWcFromStrength(fcrKg, this.input.isAirEntrained);
+    
+    // Condición de durabilidad
+    const durCondition = ACI_DATA.durabilityConditions.find(c => c.id === this.input.durabilityId) || ACI_DATA.durabilityConditions[0];
+    const wcDurability = durCondition.maxWc;
+    const finalWc = Math.min(wcStrength, wcDurability);
+    const governedBy = wcStrength <= wcDurability ? 'Resistencia' : 'Durabilidad';
+
+    // Verificación de resistencia mínima por durabilidad
+    let durabilityAlert = null;
+    if (durCondition.minFcKg > 0 && fcKg < durCondition.minFcKg) {
+      durabilityAlert = `Advertencia: La resistencia especificada (${fcKg.toFixed(0)} kg/cm²) es menor que la mínima exigida por durabilidad (${durCondition.minFcKg} kg/cm²). Se recomienda subir f'c.`;
+    }
+
+    r.step4 = {
+      wcStrength: wcStrength,
+      wcDurability: wcDurability,
+      finalWc: finalWc,
+      governedBy: governedBy,
+      durabilityCondition: durCondition,
+      durabilityAlert: durabilityAlert
+    };
+
+    // ==========================================
+    // PASO 5: Contenido de Cemento
+    // ==========================================
+    const cementWeight = designWater / finalWc;
+    const bagWeight = parseFloat(this.input.bagWeight) || 42.5;
+    const cementBags = cementWeight / bagWeight;
+
+    r.step5 = {
+      cementWeight: Math.round(cementWeight * 10) / 10, // kg/m3
+      bagWeight: bagWeight,
+      cementBags: Math.round(cementBags * 100) / 100
+    };
+
+    // ==========================================
+    // PASO 6: Contenido de Agregado Grueso (Grava)
+    // ==========================================
+    const b_b0_ratio = getAciCoarseAggregateVolumeRatio(this.input.tmn, parseFloat(this.input.sandFineness));
+    const gravelDryWeight = b_b0_ratio * parseFloat(this.input.gravelUnitWeight);
+    const gravelAbsVolume = gravelDryWeight / (parseFloat(this.input.gravelDensity) * 1000);
+
+    r.step6 = {
+      finenessModulus: parseFloat(this.input.sandFineness),
+      gravelUnitWeight: parseFloat(this.input.gravelUnitWeight),
+      gravelDensity: parseFloat(this.input.gravelDensity),
+      b_b0_ratio: b_b0_ratio,
+      gravelDryWeight: Math.round(gravelDryWeight * 10) / 10, // kg/m3
+      gravelAbsVolume: Math.round(gravelAbsVolume * 10000) / 10000 // m3
+    };
+
+    // ==========================================
+    // PASO 7: Contenido de Agregado Fino (Arena) - Método Volúmenes Absolutos
+    // ==========================================
+    const volWater = designWater / 1000;
+    const volCement = cementWeight / (parseFloat(this.input.cementDensity) * 1000);
+    const volAir = waterAirData.airPct / 100;
+    const volGravel = gravelAbsVolume;
+
+    const sumKnownVolumes = volWater + volCement + volAir + volGravel;
+    const volSand = Math.max(0, 1.000 - sumKnownVolumes);
+    const sandDryWeight = volSand * (parseFloat(this.input.sandDensity) * 1000);
+
+    // Comparación: Método por peso (Tabla 6.3.7.1)
+    const weightTable = this.input.isAirEntrained ? ACI_DATA.firstEstimateWeightTable.airEntrained : ACI_DATA.firstEstimateWeightTable.nonAir;
+    const estFreshWeight = weightTable[this.input.tmn] || 2350;
+    const sandWeightByWeightMethod = Math.max(0, estFreshWeight - (designWater + cementWeight + gravelDryWeight));
+
+    r.step7 = {
+      volWater: Math.round(volWater * 10000) / 10000,
+      volCement: Math.round(volCement * 10000) / 10000,
+      volAir: Math.round(volAir * 10000) / 10000,
+      volGravel: Math.round(volGravel * 10000) / 10000,
+      sumKnownVolumes: Math.round(sumKnownVolumes * 10000) / 10000,
+      volSand: Math.round(volSand * 10000) / 10000,
+      sandDensity: parseFloat(this.input.sandDensity),
+      sandDryWeight: Math.round(sandDryWeight * 10) / 10, // kg/m3
+      estFreshWeight: estFreshWeight,
+      sandWeightByWeightMethod: Math.round(sandWeightByWeightMethod * 10) / 10
+    };
+
+    // Total peso seco unitario
+    const totalDryWeight = designWater + cementWeight + gravelDryWeight + sandDryWeight;
+    r.step7.totalDryWeight = Math.round(totalDryWeight * 10) / 10;
+
+    // ==========================================
+    // PASO 8: Corrección por Humedad y Absorción
+    // ==========================================
+    const sandMoisture = parseFloat(this.input.sandMoisture) || 0;
+    const sandAbsorption = parseFloat(this.input.sandAbsorption) || 0;
+    const gravelMoisture = parseFloat(this.input.gravelMoisture) || 0;
+    const gravelAbsorption = parseFloat(this.input.gravelAbsorption) || 0;
+
+    // Pesos húmedos
+    const sandWetWeight = sandDryWeight * (1 + sandMoisture / 100);
+    const gravelWetWeight = gravelDryWeight * (1 + gravelMoisture / 100);
+
+    // Aportes de agua libre (Humedad - Absorción)
+    // Si W - Abs > 0 aporta agua; si W - Abs < 0 absorbe agua
+    const sandFreeWater = sandDryWeight * ((sandMoisture - sandAbsorption) / 100);
+    const gravelFreeWater = gravelDryWeight * ((gravelMoisture - gravelAbsorption) / 100);
+    const totalFreeWater = sandFreeWater + gravelFreeWater;
+
+    // Agua efectiva a añadir a la mezcladora
+    const effectiveWater = designWater - totalFreeWater;
+
+    const totalWetWeight = effectiveWater + cementWeight + sandWetWeight + gravelWetWeight;
+
+    r.step8 = {
+      sandMoisture: sandMoisture,
+      sandAbsorption: sandAbsorption,
+      gravelMoisture: gravelMoisture,
+      gravelAbsorption: gravelAbsorption,
+      sandWetWeight: Math.round(sandWetWeight * 10) / 10,
+      gravelWetWeight: Math.round(gravelWetWeight * 10) / 10,
+      sandFreeWater: Math.round(sandFreeWater * 10) / 10,
+      gravelFreeWater: Math.round(gravelFreeWater * 10) / 10,
+      totalFreeWater: Math.round(totalFreeWater * 10) / 10,
+      effectiveWater: Math.round(effectiveWater * 10) / 10,
+      totalWetWeight: Math.round(totalWetWeight * 10) / 10
+    };
+
+    // ==========================================
+    // PASO 9: Dosificaciones Prácticas en Obra
+    // ==========================================
+    // 1) Proporción en peso seco: 1 : (Sand/Cem) : (Gravel/Cem) / (Water/Cem)
+    const ratioDrySand = sandDryWeight / cementWeight;
+    const ratioDryGravel = gravelDryWeight / cementWeight;
+    const ratioDryWater = designWater / cementWeight;
+
+    // 2) Proporción en peso húmedo (corregido):
+    const ratioWetSand = sandWetWeight / cementWeight;
+    const ratioWetGravel = gravelWetWeight / cementWeight;
+    const ratioWetWater = effectiveWater / cementWeight;
+
+    // 3) Por bolsa de cemento (peso real en obra):
+    const perBag = {
+      bagWeight: bagWeight,
+      cementKg: bagWeight,
+      drySandKg: Math.round((ratioDrySand * bagWeight) * 10) / 10,
+      dryGravelKg: Math.round((ratioDryGravel * bagWeight) * 10) / 10,
+      designWaterLiters: Math.round((ratioDryWater * bagWeight) * 10) / 10,
+      wetSandKg: Math.round((ratioWetSand * bagWeight) * 10) / 10,
+      wetGravelKg: Math.round((ratioWetGravel * bagWeight) * 10) / 10,
+      effectiveWaterLiters: Math.round((ratioWetWater * bagWeight) * 10) / 10
+    };
+
+    // 4) Dosificación en Volumen de Obra (Baldes y Carretillas)
+    // Densidad suelta de arena húmeda aprox ~ 1500-1600 kg/m3 (o 1.5 kg/L)
+    // Densidad suelta de grava aprox ~ 1450-1550 kg/m3 (o 1.5 kg/L)
+    const bucketLiters = parseFloat(this.input.bucketVolumeLiters) || 19;
+    
+    // Estimación en litros de arena húmeda y grava húmeda por bolsa
+    const sandLooseDensity = (parseFloat(this.input.sandDensity) * 1000) * 0.58; // Estimado suelto ~ 1530 kg/m3
+    const gravelLooseDensity = (parseFloat(this.input.gravelUnitWeight)) * 0.90; // Estimado suelto ~ 1440 kg/m3
+
+    const sandLitersPerBag = (perBag.wetSandKg / sandLooseDensity) * 1000;
+    const gravelLitersPerBag = (perBag.wetGravelKg / gravelLooseDensity) * 1000;
+
+    const sandBucketsPerBag = Math.round((sandLitersPerBag / bucketLiters) * 10) / 10;
+    const gravelBucketsPerBag = Math.round((gravelLitersPerBag / bucketLiters) * 10) / 10;
+    const waterBucketsPerBag = Math.round((perBag.effectiveWaterLiters / bucketLiters) * 10) / 10;
+
+    // 5) Tanda personalizada (para trompito o volumen específico)
+    const batchVol = parseFloat(this.input.batchVolumeM3) || 0.15;
+    const batch = {
+      volumeM3: batchVol,
+      cementKg: Math.round((cementWeight * batchVol) * 10) / 10,
+      cementBags: Math.round(((cementWeight * batchVol) / bagWeight) * 100) / 100,
+      wetSandKg: Math.round((sandWetWeight * batchVol) * 10) / 10,
+      wetGravelKg: Math.round((gravelWetWeight * batchVol) * 10) / 10,
+      effectiveWaterLiters: Math.round((effectiveWater * batchVol) * 10) / 10,
+      sandBuckets: Math.round((sandBucketsPerBag * ((cementWeight * batchVol) / bagWeight)) * 10) / 10,
+      gravelBuckets: Math.round((gravelBucketsPerBag * ((cementWeight * batchVol) / bagWeight)) * 10) / 10,
+      waterBuckets: Math.round((waterBucketsPerBag * ((cementWeight * batchVol) / bagWeight)) * 10) / 10
+    };
+
+    r.step9 = {
+      ratioDry: {
+        cement: 1,
+        sand: Math.round(ratioDrySand * 100) / 100,
+        gravel: Math.round(ratioDryGravel * 100) / 100,
+        water: Math.round(ratioDryWater * 100) / 100,
+        str: `1 : ${ratioDrySand.toFixed(2)} : ${ratioDryGravel.toFixed(2)} / ${ratioDryWater.toFixed(2)}`
+      },
+      ratioWet: {
+        cement: 1,
+        sand: Math.round(ratioWetSand * 100) / 100,
+        gravel: Math.round(ratioWetGravel * 100) / 100,
+        water: Math.round(ratioWetWater * 100) / 100,
+        str: `1 : ${ratioWetSand.toFixed(2)} : ${ratioWetGravel.toFixed(2)} / ${ratioWetWater.toFixed(2)}`
+      },
+      perBag: perBag,
+      bucketLiters: bucketLiters,
+      sandBucketsPerBag: sandBucketsPerBag,
+      gravelBucketsPerBag: gravelBucketsPerBag,
+      waterBucketsPerBag: waterBucketsPerBag,
+      batch: batch
+    };
+
+    // Rendimiento teórico del concreto (m3)
+    const yieldM3 = volWater + volCement + volAir + volGravel + volSand;
+    r.yieldM3 = Math.round(yieldM3 * 1000) / 1000;
+
+    return r;
+  }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { AciMixCalculator };
+}
+
+  </script>
+  <script>
+/**
+ * APP CONTROLLER & INTERFACE LOGIC
+ * Calculadora de Mezclas ACI 211.1
+ */
+
+// Estado global de la aplicación
+const AppState = {
+  currentInput: Object.assign({}, ACI_DATA.examplePresets[0]),
+  lastResult: null,
+  deferredInstallPrompt: null,
+  savedProjects: []
+};
+
+// Inicialización cuando carga el DOM
+document.addEventListener('DOMContentLoaded', () => {
+  initServiceWorker();
+  initPwaInstall();
+  loadSavedProjects();
+  initEventListeners();
+  populateDropdowns();
+  
+  // Cargar estado guardado o preset por defecto
+  const cached = localStorage.getItem('aci_current_state');
+  if (cached) {
+    try {
+      AppState.currentInput = JSON.parse(cached);
+    } catch (e) {
+      console.warn('Error reading cached state, using default preset');
+    }
+  }
+  
+  syncFormFromState();
+  runCalculation();
+});
+
+// Registrar Service Worker para PWA Offline
+function initServiceWorker() {
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('SW registrado con éxito:', reg.scope))
+        .catch(err => console.log('SW falló:', err));
+    });
+  }
+}
+
+// Escuchar evento de instalación PWA
+function initPwaInstall() {
+  const installBtn = document.getElementById('btnInstallPwa');
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    AppState.deferredInstallPrompt = e;
+    if (installBtn) {
+      installBtn.style.display = 'inline-flex';
+    }
+  });
+
+  if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+      if (AppState.deferredInstallPrompt) {
+        AppState.deferredInstallPrompt.prompt();
+        const { outcome } = await AppState.deferredInstallPrompt.userChoice;
+        console.log('Resultado de instalación:', outcome);
+        AppState.deferredInstallPrompt = null;
+        installBtn.style.display = 'none';
+      }
+    });
+  }
+
+  window.addEventListener('appinstalled', () => {
+    console.log('App instalada como PWA');
+    if (installBtn) installBtn.style.display = 'none';
+  });
+}
+
+// Poblar selects dinámicos con datos ACI
+function populateDropdowns() {
+  // TMN select
+  const tmnSelect = document.getElementById('inputTmn');
+  if (tmnSelect) {
+    tmnSelect.innerHTML = ACI_DATA.tmnOptions.map(t => 
+      `<option value="${t.id}">${t.label}</option>`
+    ).join('');
+  }
+
+  // Slump Presets
+  const slumpSelect = document.getElementById('inputSlumpPreset');
+  if (slumpSelect) {
+    slumpSelect.innerHTML = ACI_DATA.slumpPresets.map(s => 
+      `<option value="${s.id}">${s.label} (${s.min}-${s.max} cm)</option>`
+    ).join('');
+  }
+
+  // Durability conditions
+  const durSelect = document.getElementById('inputDurability');
+  if (durSelect) {
+    durSelect.innerHTML = ACI_DATA.durabilityConditions.map(d => 
+      `<option value="${d.id}">${d.label} ${d.maxWc < 1 ? '(Max a/c: ' + d.maxWc + ')' : ''}</option>`
+    ).join('');
+  }
+
+  // Presets select
+  const presetSelect = document.getElementById('presetSelect');
+  if (presetSelect) {
+    presetSelect.innerHTML = `<option value="">-- Cargar mezcla tipo --</option>` + 
+      ACI_DATA.examplePresets.map((p, idx) => 
+        `<option value="${idx}">${p.name}</option>`
+      ).join('');
+  }
+}
+
+// Vincular eventos de la interfaz
+function initEventListeners() {
+  // Cambio de pestañas
+  const tabButtons = document.querySelectorAll('.nav-tab');
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabButtons.forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      
+      btn.classList.add('active');
+      const targetId = btn.getAttribute('data-tab');
+      const panel = document.getElementById(targetId);
+      if (panel) panel.classList.add('active');
+      
+      // Si cambia a pestaña de gráficos, refrescar render
+      if (targetId === 'tab-charts') {
+        renderCharts();
+      }
+    });
+  });
+
+  // Selector de Presets
+  const presetSelect = document.getElementById('presetSelect');
+  if (presetSelect) {
+    presetSelect.addEventListener('change', (e) => {
+      const idx = e.target.value;
+      if (idx !== '') {
+        const selected = ACI_DATA.examplePresets[parseInt(idx, 10)];
+        if (selected) {
+          AppState.currentInput = Object.assign({}, selected);
+          syncFormFromState();
+          runCalculation();
+        }
+      }
+    });
+  }
+
+  // Cambio de unidad (kg/cm2 vs MPa)
+  const unitKgcm2 = document.getElementById('unitKgcm2');
+  const unitMpa = document.getElementById('unitMpa');
+  const onUnitChange = (unit) => {
+    if (unit === AppState.currentInput.unit) return;
+    const oldUnit = AppState.currentInput.unit;
+    AppState.currentInput.unit = unit;
+
+    // Convertir fc actual
+    if (unit === 'mpa' && oldUnit === 'kgcm2') {
+      AppState.currentInput.fc = Math.round((AppState.currentInput.fc / 10.197) * 10) / 10;
+      if (AppState.currentInput.stdDev) {
+        AppState.currentInput.stdDev = Math.round((AppState.currentInput.stdDev / 10.197) * 10) / 10;
+      }
+    } else if (unit === 'kgcm2' && oldUnit === 'mpa') {
+      AppState.currentInput.fc = Math.round(AppState.currentInput.fc * 10.197);
+      if (AppState.currentInput.stdDev) {
+        AppState.currentInput.stdDev = Math.round(AppState.currentInput.stdDev * 10.197);
+      }
+    }
+
+    updateUnitLabels();
+    syncFormFromState();
+    runCalculation();
+  };
+
+  if (unitKgcm2) unitKgcm2.addEventListener('change', () => onUnitChange('kgcm2'));
+  if (unitMpa) unitMpa.addEventListener('change', () => onUnitChange('mpa'));
+
+  // Slump Preset Change
+  const inputSlumpPreset = document.getElementById('inputSlumpPreset');
+  if (inputSlumpPreset) {
+    inputSlumpPreset.addEventListener('change', (e) => {
+      const presetId = e.target.value;
+      const found = ACI_DATA.slumpPresets.find(p => p.id === presetId);
+      if (found) {
+        AppState.currentInput.slumpPreset = presetId;
+        AppState.currentInput.slumpCm = found.default;
+        const slumpValInput = document.getElementById('inputSlumpCm');
+        if (slumpValInput) slumpValInput.value = found.default;
+        runCalculation();
+      }
+    });
+  }
+
+  // Slump Slider/Input sync
+  const inputSlumpCm = document.getElementById('inputSlumpCm');
+  if (inputSlumpCm) {
+    inputSlumpCm.addEventListener('input', (e) => {
+      AppState.currentInput.slumpCm = parseFloat(e.target.value) || 0;
+      runCalculation();
+    });
+  }
+
+  // Radio cards (Aire incorporado)
+  const radioNonAir = document.getElementById('radioNonAir');
+  const radioAir = document.getElementById('radioAir');
+  const airExposureWrap = document.getElementById('airExposureWrap');
+
+  const onAirChange = (isAir) => {
+    AppState.currentInput.isAirEntrained = isAir;
+    if (airExposureWrap) {
+      airExposureWrap.style.display = isAir ? 'block' : 'none';
+    }
+    const cardNonAir = document.getElementById('cardNonAir');
+    const cardAir = document.getElementById('cardAir');
+    if (cardNonAir) cardNonAir.classList.toggle('selected', !isAir);
+    if (cardAir) cardAir.classList.toggle('selected', isAir);
+    runCalculation();
+  };
+
+  if (radioNonAir) radioNonAir.addEventListener('change', () => onAirChange(false));
+  if (radioAir) radioAir.addEventListener('change', () => onAirChange(true));
+
+  // Checkbox Desviación Estándar
+  const checkStdDev = document.getElementById('checkStdDev');
+  const stdDevWrap = document.getElementById('stdDevWrap');
+  if (checkStdDev) {
+    checkStdDev.addEventListener('change', (e) => {
+      AppState.currentInput.hasStandardDev = e.target.checked;
+      if (stdDevWrap) stdDevWrap.style.display = e.target.checked ? 'block' : 'none';
+      runCalculation();
+    });
+  }
+
+  // Checkbox Aditivo Reductor
+  const checkAdditive = document.getElementById('checkAdditive');
+  const additiveWrap = document.getElementById('additiveWrap');
+  if (checkAdditive) {
+    checkAdditive.addEventListener('change', (e) => {
+      AppState.currentInput.useAdditive = e.target.checked;
+      if (additiveWrap) additiveWrap.style.display = e.target.checked ? 'block' : 'none';
+      runCalculation();
+    });
+  }
+
+  // Todos los demás campos numéricos y selectores reactivos
+  const reactiveIds = [
+    'inputFc', 'inputStdDev', 'inputTmn', 'inputAirExposure', 'inputDurability',
+    'inputWaterReduction', 'inputCementDensity', 'inputBagWeight',
+    'inputSandDensity', 'inputSandAbsorption', 'inputSandMoisture', 'inputSandFineness',
+    'inputGravelDensity', 'inputGravelAbsorption', 'inputGravelMoisture', 'inputGravelUnitWeight',
+    'inputBatchVolume', 'inputBucketVolume'
+  ];
+
+  reactiveIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', () => {
+        readFormIntoState();
+        runCalculation();
+      });
+      el.addEventListener('change', () => {
+        readFormIntoState();
+        runCalculation();
+      });
+    }
+  });
+
+  // Modal Abrir en Celular / QR
+  const btnOpenMobileModal = document.getElementById('btnOpenMobileModal');
+  const mobileModal = document.getElementById('mobileModal');
+  const btnCloseMobileModal = document.getElementById('btnCloseMobileModal');
+  const qrCodeImage = document.getElementById('qrCodeImage');
+  const mobileUrlDisplay = document.getElementById('mobileUrlDisplay');
+
+  if (btnOpenMobileModal && mobileModal) {
+    btnOpenMobileModal.addEventListener('click', () => {
+      // Determinar IP de red local
+      const port = window.location.port || '3000';
+      const host = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? '192.168.0.42'
+        : window.location.hostname;
+      const mobileUrl = `http://${host}:${port}`;
+
+      if (mobileUrlDisplay) mobileUrlDisplay.textContent = mobileUrl;
+      if (qrCodeImage) {
+        qrCodeImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(mobileUrl)}`;
+      }
+      mobileModal.classList.add('active');
+    });
+
+    if (btnCloseMobileModal) {
+      btnCloseMobileModal.addEventListener('click', () => {
+        mobileModal.classList.remove('active');
+      });
+    }
+
+    mobileModal.addEventListener('click', (e) => {
+      if (e.target === mobileModal) {
+        mobileModal.classList.remove('active');
+      }
+    });
+  }
+
+  // Botón Imprimir / PDF
+  const btnPrint = document.getElementById('btnPrintReport');
+  if (btnPrint) {
+    btnPrint.addEventListener('click', () => {
+      window.print();
+    });
+  }
+
+  // Botones de Guardar / Cargar Proyecto
+  const btnSaveProject = document.getElementById('btnSaveProject');
+  if (btnSaveProject) {
+    btnSaveProject.addEventListener('click', promptSaveProject);
+  }
+
+  const btnExportJson = document.getElementById('btnExportJson');
+  if (btnExportJson) {
+    btnExportJson.addEventListener('click', exportProjectJson);
+  }
+
+  const fileImportJson = document.getElementById('fileImportJson');
+  if (fileImportJson) {
+    fileImportJson.addEventListener('change', importProjectJson);
+  }
+
+  // Quickbar en móvil abre la pestaña de dosificación
+  const mobileQuickbar = document.getElementById('mobileQuickbar');
+  if (mobileQuickbar) {
+    mobileQuickbar.addEventListener('click', () => {
+      const siteTab = document.querySelector('.nav-tab[data-tab="tab-site"]');
+      if (siteTab) siteTab.click();
+    });
+  }
+}
+
+// Sincronizar etiquetas de unidades (kg/cm2 vs MPa)
+function updateUnitLabels() {
+  const isMpa = AppState.currentInput.unit === 'mpa';
+  const labels = document.querySelectorAll('.unit-fc-label');
+  labels.forEach(el => el.textContent = isMpa ? 'MPa' : 'kg/cm²');
+}
+
+// Sincronizar formulario HTML desde el objeto AppState
+function syncFormFromState() {
+  const inp = AppState.currentInput;
+
+  // Radios de unidad
+  const unitKgcm2 = document.getElementById('unitKgcm2');
+  const unitMpa = document.getElementById('unitMpa');
+  if (unitKgcm2) unitKgcm2.checked = inp.unit === 'kgcm2';
+  if (unitMpa) unitMpa.checked = inp.unit === 'mpa';
+  updateUnitLabels();
+
+  // Valores numéricos
+  setVal('inputFc', inp.fc);
+  setVal('inputStdDev', inp.stdDev || 0);
+  setVal('inputSlumpCm', inp.slumpCm);
+  setVal('inputSlumpPreset', inp.slumpPreset || 'vigas_columnas');
+  setVal('inputTmn', inp.tmn);
+  
+  // Desviación estándar
+  const checkStdDev = document.getElementById('checkStdDev');
+  const stdDevWrap = document.getElementById('stdDevWrap');
+  if (checkStdDev) checkStdDev.checked = !!inp.hasStandardDev;
+  if (stdDevWrap) stdDevWrap.style.display = inp.hasStandardDev ? 'block' : 'none';
+
+  // Aire
+  const radioNonAir = document.getElementById('radioNonAir');
+  const radioAir = document.getElementById('radioAir');
+  const cardNonAir = document.getElementById('cardNonAir');
+  const cardAir = document.getElementById('cardAir');
+  const airExposureWrap = document.getElementById('airExposureWrap');
+
+  if (radioNonAir) radioNonAir.checked = !inp.isAirEntrained;
+  if (radioAir) radioAir.checked = !!inp.isAirEntrained;
+  if (cardNonAir) cardNonAir.classList.toggle('selected', !inp.isAirEntrained);
+  if (cardAir) cardAir.classList.toggle('selected', !!inp.isAirEntrained);
+  if (airExposureWrap) airExposureWrap.style.display = inp.isAirEntrained ? 'block' : 'none';
+  setVal('inputAirExposure', inp.airExposure || 'mild');
+
+  // Durabilidad
+  setVal('inputDurability', inp.durabilityId || 'none');
+
+  // Aditivo
+  const checkAdditive = document.getElementById('checkAdditive');
+  const additiveWrap = document.getElementById('additiveWrap');
+  if (checkAdditive) checkAdditive.checked = !!inp.useAdditive;
+  if (additiveWrap) additiveWrap.style.display = inp.useAdditive ? 'block' : 'none';
+  setVal('inputWaterReduction', inp.waterReductionPct || 0);
+
+  // Materiales
+  setVal('inputCementDensity', inp.cementDensity || 3.15);
+  setVal('inputBagWeight', inp.bagWeight || 42.5);
+  setVal('inputSandDensity', inp.sandDensity || 2.65);
+  setVal('inputSandAbsorption', inp.sandAbsorption || 1.5);
+  setVal('inputSandMoisture', inp.sandMoisture || 4.0);
+  setVal('inputSandFineness', inp.sandFineness || 2.70);
+  setVal('inputGravelDensity', inp.gravelDensity || 2.68);
+  setVal('inputGravelAbsorption', inp.gravelAbsorption || 0.8);
+  setVal('inputGravelMoisture', inp.gravelMoisture || 1.5);
+  setVal('inputGravelUnitWeight', inp.gravelUnitWeight || 1600);
+
+  // Tanda en obra
+  setVal('inputBatchVolume', inp.batchVolumeM3 || 0.15);
+  setVal('inputBucketVolume', inp.bucketVolumeLiters || 19);
+}
+
+function setVal(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.value = val;
+}
+
+// Leer valores del formulario y depositarlos en AppState
+function readFormIntoState() {
+  const getFloat = (id, def = 0) => {
+    const el = document.getElementById(id);
+    return el ? parseFloat(el.value) || def : def;
+  };
+  const getStr = (id, def = '') => {
+    const el = document.getElementById(id);
+    return el ? el.value : def;
+  };
+
+  AppState.currentInput.fc = getFloat('inputFc', 210);
+  AppState.currentInput.stdDev = getFloat('inputStdDev', 0);
+  AppState.currentInput.hasStandardDev = document.getElementById('checkStdDev')?.checked || false;
+  AppState.currentInput.slumpCm = getFloat('inputSlumpCm', 8.0);
+  AppState.currentInput.slumpPreset = getStr('inputSlumpPreset', 'vigas_columnas');
+  AppState.currentInput.tmn = getStr('inputTmn', '3/4');
+
+  const radioAir = document.getElementById('radioAir');
+  AppState.currentInput.isAirEntrained = radioAir ? radioAir.checked : false;
+  AppState.currentInput.airExposure = getStr('inputAirExposure', 'mild');
+
+  AppState.currentInput.durabilityId = getStr('inputDurability', 'none');
+  AppState.currentInput.useAdditive = document.getElementById('checkAdditive')?.checked || false;
+  AppState.currentInput.waterReductionPct = getFloat('inputWaterReduction', 0);
+
+  AppState.currentInput.cementDensity = getFloat('inputCementDensity', 3.15);
+  AppState.currentInput.bagWeight = getFloat('inputBagWeight', 42.5);
+
+  AppState.currentInput.sandDensity = getFloat('inputSandDensity', 2.65);
+  AppState.currentInput.sandAbsorption = getFloat('inputSandAbsorption', 1.5);
+  AppState.currentInput.sandMoisture = getFloat('inputSandMoisture', 4.0);
+  AppState.currentInput.sandFineness = getFloat('inputSandFineness', 2.70);
+
+  AppState.currentInput.gravelDensity = getFloat('inputGravelDensity', 2.68);
+  AppState.currentInput.gravelAbsorption = getFloat('inputGravelAbsorption', 0.8);
+  AppState.currentInput.gravelMoisture = getFloat('inputGravelMoisture', 1.5);
+  AppState.currentInput.gravelUnitWeight = getFloat('inputGravelUnitWeight', 1600);
+
+  AppState.currentInput.batchVolumeM3 = getFloat('inputBatchVolume', 0.15);
+  AppState.currentInput.bucketVolumeLiters = getFloat('inputBucketVolume', 19);
+
+  // Guardar en localStorage para persistencia
+  try {
+    localStorage.setItem('aci_current_state', JSON.stringify(AppState.currentInput));
+  } catch (e) {}
+}
+
+// Ejecutar el motor de cálculo y actualizar todas las vistas
+function runCalculation() {
+  const calc = new AciMixCalculator(AppState.currentInput);
+  const res = calc.calculate();
+  AppState.lastResult = res;
+
+  updateResultsSidebar(res);
+  updateResultsTable(res);
+  updateSiteBatchingTab(res);
+  updateCalculationMemoryTab(res);
+  renderCharts();
+}
+
+// Actualizar tarjeta lateral resumen
+function updateResultsSidebar(res) {
+  const isMpa = AppState.currentInput.unit === 'mpa';
+  const fcrVal = isMpa ? `${res.step1.fcrMpa} MPa` : `${res.step1.fcrKg} kg/cm²`;
+
+  setText('resRatioDry', res.step9.ratioDry.str);
+  setText('resRatioWet', res.step9.ratioWet.str);
+  setText('resFcr', fcrVal);
+  setText('resWc', res.step4.finalWc.toFixed(3));
+  setText('resWcGov', `(Por ${res.step4.governedBy})`);
+  setText('resCement', `${res.step5.cementWeight} kg`);
+  setText('resBags', `${res.step5.cementBags} bolsas de ${res.step5.bagWeight} kg`);
+  setText('resEffectiveWater', `${res.step8.effectiveWater} L`);
+  setText('resDesignWater', `${res.step3.designWater} L (diseño)`);
+
+  // Actualizar quickbar en móvil
+  setText('quickbarRatio', res.step9.ratioWet.str);
+  setText('quickbarCement', `${res.step5.cementWeight} kg/m³ (${res.step5.cementBags} bols)`);
+
+  // Alerta de durabilidad
+  const alertBox = document.getElementById('durabilityAlertBox');
+  if (alertBox) {
+    if (res.step4.durabilityAlert) {
+      alertBox.textContent = res.step4.durabilityAlert;
+      alertBox.style.display = 'block';
+    } else {
+      alertBox.style.display = 'none';
+    }
+  }
+}
+
+// Actualizar tabla comparativa de materiales (Seco vs Húmedo / Volumen Absoluto)
+function updateResultsTable(res) {
+  const s3 = res.step3;
+  const s5 = res.step5;
+  const s6 = res.step6;
+  const s7 = res.step7;
+  const s8 = res.step8;
+
+  // Cemento
+  setText('tblCemDry', s5.cementWeight.toFixed(1));
+  setText('tblCemVol', s7.volCement.toFixed(4));
+  setText('tblCemWet', s5.cementWeight.toFixed(1));
+
+  // Agua
+  setText('tblWaterDry', s3.designWater.toFixed(1));
+  setText('tblWaterVol', s7.volWater.toFixed(4));
+  setText('tblWaterWet', s8.effectiveWater.toFixed(1));
+
+  // Aire
+  setText('tblAirVol', s7.volAir.toFixed(4));
+  setText('tblAirPct', `${s3.airPct}%`);
+
+  // Grava
+  setText('tblGravelDry', s6.gravelDryWeight.toFixed(1));
+  setText('tblGravelVol', s7.volGravel.toFixed(4));
+  setText('tblGravelWet', s8.gravelWetWeight.toFixed(1));
+
+  // Arena
+  setText('tblSandDry', s7.sandDryWeight.toFixed(1));
+  setText('tblSandVol', s7.volSand.toFixed(4));
+  setText('tblSandWet', s8.sandWetWeight.toFixed(1));
+
+  // Totales
+  setText('tblTotalDry', s7.totalDryWeight.toFixed(1));
+  setText('tblTotalVol', res.yieldM3.toFixed(4));
+  setText('tblTotalWet', s8.totalWetWeight.toFixed(1));
+}
+
+// Actualizar Pestaña de Dosificación en Obra
+function updateSiteBatchingTab(res) {
+  const p = res.step9.perBag;
+  const b = res.step9.batch;
+
+  // Por saco
+  setText('siteBagWeightTitle', `Por 1 Bolsa de Cemento (${p.bagWeight} kg)`);
+  setText('siteBagCement', `${p.cementKg} kg (1 bolsa)`);
+  setText('siteBagSandWet', `${p.wetSandKg} kg (${res.step9.sandBucketsPerBag} baldes de 19L)`);
+  setText('siteBagGravelWet', `${p.wetGravelKg} kg (${res.step9.gravelBucketsPerBag} baldes de 19L)`);
+  setText('siteBagWater', `${p.effectiveWaterLiters} L (${res.step9.waterBucketsPerBag} baldes de 19L)`);
+  setText('siteBagRatio', res.step9.ratioWet.str);
+
+  // Por Tanda
+  setText('siteBatchVolTitle', `Tanda Personalizada (${b.volumeM3} m³)`);
+  setText('siteBatchCement', `${b.cementKg} kg (~${b.cementBags} bolsas)`);
+  setText('siteBatchSand', `${b.wetSandKg} kg (~${b.sandBuckets} baldes)`);
+  setText('siteBatchGravel', `${b.wetGravelKg} kg (~${b.gravelBuckets} baldes)`);
+  setText('siteBatchWater', `${b.effectiveWaterLiters} L (~${b.waterBuckets} baldes)`);
+
+  // Por m3
+  setText('siteM3Cement', `${res.step5.cementWeight} kg (${res.step5.cementBags} bolsas)`);
+  setText('siteM3Sand', `${res.step8.sandWetWeight} kg`);
+  setText('siteM3Gravel', `${res.step8.gravelWetWeight} kg`);
+  setText('siteM3Water', `${res.step8.effectiveWater} L`);
+}
+
+// Actualizar Memoria de Cálculo Detallada con todas las fórmulas ACI
+function updateCalculationMemoryTab(res) {
+  const mem = document.getElementById('calcMemoryContainer');
+  if (!mem) return;
+
+  const isMpa = AppState.currentInput.unit === 'mpa';
+  const fcText = isMpa ? `${res.step1.fcMpa} MPa` : `${res.step1.fcKg} kg/cm²`;
+  const fcrText = isMpa ? `${res.step1.fcrMpa} MPa` : `${res.step1.fcrKg} kg/cm²`;
+
+  let html = `
+    <div class="memory-step">
+      <div class="memory-step-header">
+        <span class="step-number">1</span>
+        <h3 class="memory-step-title">Resistencia Media Requerida (f'cr) - ACI 318 / 211</h3>
+      </div>
+      <p>Resistencia especificada: <strong>${fcText}</strong></p>
+      <div class="formula-box">
+        ${res.step1.formula}<br>
+        Cálculo: ${res.step1.details}
+      </div>
+      <p>Resistencia de diseño obtenida: <strong>f'cr = ${fcrText}</strong></p>
+    </div>
+
+    <div class="memory-step">
+      <div class="memory-step-header">
+        <span class="step-number">2</span>
+        <h3 class="memory-step-title">Asentamiento (Slump) y Tamaño Máximo Nominal (TMN)</h3>
+      </div>
+      <p>Revenimiento de diseño: <strong>${res.step2.slumpCm} cm (~${res.step2.slumpInches}")</strong></p>
+      <p>Tamaño Máximo Nominal del agregado grueso: <strong>${res.step2.tmnLabel}</strong></p>
+    </div>
+
+    <div class="memory-step">
+      <div class="memory-step-header">
+        <span class="step-number">3</span>
+        <h3 class="memory-step-title">Estimación del Agua de Mezclado y Aire (Tabla 6.3.3)</h3>
+      </div>
+      <p>Tipo de concreto: <strong>${res.step3.isAirEntrained ? 'Con Aire Incorporado' : 'Sin Aire Incorporado'}</strong></p>
+      <p>Contenido de aire: <strong>${res.step3.airPct}%</strong></p>
+      <div class="formula-box">
+        Agua base por tabla ACI = ${res.step3.baseWater} L/m³
+        ${res.step3.useAdditive ? `<br>Reducción por aditivo (${res.step3.waterReductionPct}%): -${res.step3.waterReductionLiters} L<br>Agua de diseño = ${res.step3.designWater} L/m³` : ''}
+      </div>
+      <p>Agua neta de diseño: <strong>${res.step3.designWater} L/m³</strong></p>
+    </div>
+
+    <div class="memory-step">
+      <div class="memory-step-header">
+        <span class="step-number">4</span>
+        <h3 class="memory-step-title">Selección de la Relación Agua/Cemento (a/c) (Tablas 6.3.4(a) y 6.3.4(b))</h3>
+      </div>
+      <div class="formula-box">
+        a/c por Resistencia (f'cr = ${fcrText}) = ${res.step4.wcStrength.toFixed(3)}<br>
+        a/c máxima por Durabilidad (${res.step4.durabilityCondition.label}) = ${res.step4.wcDurability.toFixed(3)}<br>
+        a/c de diseño = min(a/c resistencia, a/c durabilidad) = ${res.step4.finalWc.toFixed(3)}
+      </div>
+      <p>La relación a/c queda gobernada por: <strong>${res.step4.governedBy} (a/c = ${res.step4.finalWc.toFixed(3)})</strong></p>
+    </div>
+
+    <div class="memory-step">
+      <div class="memory-step-header">
+        <span class="step-number">5</span>
+        <h3 class="memory-step-title">Cálculo del Contenido de Cemento</h3>
+      </div>
+      <div class="formula-box">
+        Cemento = Agua / (a/c) = ${res.step3.designWater} / ${res.step4.finalWc.toFixed(3)} = ${res.step5.cementWeight} kg/m³<br>
+        Bolsas (${res.step5.bagWeight} kg) = ${res.step5.cementWeight} / ${res.step5.bagWeight} = ${res.step5.cementBags} bolsas
+      </div>
+      <p>Contenido de cemento: <strong>${res.step5.cementWeight} kg/m³ (${res.step5.cementBags} bolsas/m³)</strong></p>
+    </div>
+
+    <div class="memory-step">
+      <div class="memory-step-header">
+        <span class="step-number">6</span>
+        <h3 class="memory-step-title">Estimación del Agregado Grueso (Grava) (Tabla 6.3.6)</h3>
+      </div>
+      <p>Módulo de Finura de la arena: <strong>${res.step6.finenessModulus}</strong> | PVCS Grava: <strong>${res.step6.gravelUnitWeight} kg/m³</strong></p>
+      <div class="formula-box">
+        Factor b/b0 (Tabla 6.3.6) = ${res.step6.b_b0_ratio}<br>
+        Peso seco Grava = (b/b0) · PVCS = ${res.step6.b_b0_ratio} · ${res.step6.gravelUnitWeight} = ${res.step6.gravelDryWeight} kg/m³<br>
+        Volumen absoluto Grava = ${res.step6.gravelDryWeight} / (${res.step6.gravelDensity} · 1000) = ${res.step6.gravelAbsVolume.toFixed(4)} m³
+      </div>
+      <p>Grava seca: <strong>${res.step6.gravelDryWeight} kg/m³</strong> (Volumen: ${res.step6.gravelAbsVolume.toFixed(4)} m³)</p>
+    </div>
+
+    <div class="memory-step">
+      <div class="memory-step-header">
+        <span class="step-number">7</span>
+        <h3 class="memory-step-title">Estimación del Agregado Fino (Arena) - Método Volúmenes Absolutos</h3>
+      </div>
+      <div class="formula-box">
+        Volumen de Agua = ${res.step3.designWater} / 1000 = ${res.step7.volWater.toFixed(4)} m³<br>
+        Volumen de Cemento = ${res.step5.cementWeight} / (${AppState.currentInput.cementDensity} · 1000) = ${res.step7.volCement.toFixed(4)} m³<br>
+        Volumen de Aire = ${res.step3.airPct} / 100 = ${res.step7.volAir.toFixed(4)} m³<br>
+        Volumen de Grava = ${res.step7.volGravel.toFixed(4)} m³<br>
+        Suma de volúmenes conocidos = ${res.step7.sumKnownVolumes.toFixed(4)} m³<br>
+        Volumen de Arena = 1.0000 - ${res.step7.sumKnownVolumes.toFixed(4)} = ${res.step7.volSand.toFixed(4)} m³<br>
+        Peso seco Arena = ${res.step7.volSand.toFixed(4)} · (${res.step7.sandDensity} · 1000) = ${res.step7.sandDryWeight} kg/m³
+      </div>
+      <p>Arena seca: <strong>${res.step7.sandDryWeight} kg/m³</strong> (Volumen: ${res.step7.volSand.toFixed(4)} m³)</p>
+    </div>
+
+    <div class="memory-step">
+      <div class="memory-step-header">
+        <span class="step-number">8</span>
+        <h3 class="memory-step-title">Corrección por Humedad y Absorción de Agregados</h3>
+      </div>
+      <div class="formula-box">
+        Arena húmeda (${res.step8.sandMoisture}%): ${res.step7.sandDryWeight} · (1 + ${res.step8.sandMoisture}/100) = ${res.step8.sandWetWeight} kg/m³<br>
+        Grava húmeda (${res.step8.gravelMoisture}%): ${res.step6.gravelDryWeight} · (1 + ${res.step8.gravelMoisture}/100) = ${res.step8.gravelWetWeight} kg/m³<br>
+        Aporte libre Arena (${res.step8.sandMoisture}% - ${res.step8.sandAbsorption}%): ${res.step8.sandFreeWater >= 0 ? '+' : ''}${res.step8.sandFreeWater} L<br>
+        Aporte libre Grava (${res.step8.gravelMoisture}% - ${res.step8.gravelAbsorption}%): ${res.step8.gravelFreeWater >= 0 ? '+' : ''}${res.step8.gravelFreeWater} L<br>
+        Aporte total de agua libre = ${res.step8.totalFreeWater >= 0 ? '+' : ''}${res.step8.totalFreeWater} L<br>
+        Agua efectiva a añadir = ${res.step3.designWater} - (${res.step8.totalFreeWater}) = ${res.step8.effectiveWater} L/m³
+      </div>
+      <p>Agua real de mezclado corregida: <strong>${res.step8.effectiveWater} L/m³</strong></p>
+    </div>
+  `;
+
+  mem.innerHTML = html;
+}
+
+// Renderizar gráficos SVG reactivos e interactivos
+function renderCharts() {
+  const res = AppState.lastResult;
+  if (!res) return;
+
+  const pieBox = document.getElementById('svgPieChart');
+  const barBox = document.getElementById('svgBarChart');
+
+  if (pieBox) {
+    // Gráfico de torta de volúmenes absolutos
+    const vCem = res.step7.volCement;
+    const vWater = res.step7.volWater;
+    const vAir = res.step7.volAir;
+    const vSand = res.step7.volSand;
+    const vGravel = res.step7.volGravel;
+    const total = vCem + vWater + vAir + vSand + vGravel;
+
+    const data = [
+      { name: 'Cemento', val: vCem, color: '#64748b' },
+      { name: 'Agua', val: vWater, color: '#0284c7' },
+      { name: 'Aire', val: vAir, color: '#94a3b8' },
+      { name: 'Arena', val: vSand, color: '#d97706' },
+      { name: 'Grava', val: vGravel, color: '#334155' }
+    ];
+
+    let currentAngle = 0;
+    const cx = 130, cy = 130, r = 100;
+    let paths = '';
+
+    data.forEach(item => {
+      const angle = (item.val / total) * 2 * Math.PI;
+      const x1 = cx + r * Math.cos(currentAngle);
+      const y1 = cy + r * Math.sin(currentAngle);
+      const x2 = cx + r * Math.cos(currentAngle + angle);
+      const y2 = cy + r * Math.sin(currentAngle + angle);
+      const largeArc = angle > Math.PI ? 1 : 0;
+
+      const pathData = `M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2} Z`;
+      const pct = ((item.val / total) * 100).toFixed(1);
+      paths += `<path d="${pathData}" fill="${item.color}" stroke="#ffffff" stroke-width="2">
+        <title>${item.name}: ${item.val.toFixed(4)} m³ (${pct}%)</title>
+      </path>`;
+
+      currentAngle += angle;
+    });
+
+    // Donut hole
+    paths += `<circle cx="${cx}" cy="${cy}" r="45" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" />`;
+    paths += `<text x="${cx}" y="${cy - 4}" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a">1.0 m³</text>`;
+    paths += `<text x="${cx}" y="${cy + 14}" text-anchor="middle" font-size="10" fill="#64748b">Concreto</text>`;
+
+    pieBox.innerHTML = `
+      <svg width="260" height="260" viewBox="0 0 260 260">
+        ${paths}
+      </svg>
+    `;
+  }
+
+  if (barBox) {
+    // Gráfico comparativo de barras (Seco vs Húmedo)
+    const dry = [
+      { name: 'Cemento', val: res.step5.cementWeight },
+      { name: 'Agua', val: res.step3.designWater },
+      { name: 'Arena', val: res.step7.sandDryWeight },
+      { name: 'Grava', val: res.step6.gravelDryWeight }
+    ];
+
+    const wet = [
+      { name: 'Cemento', val: res.step5.cementWeight },
+      { name: 'Agua', val: res.step8.effectiveWater },
+      { name: 'Arena', val: res.step8.sandWetWeight },
+      { name: 'Grava', val: res.step8.gravelWetWeight }
+    ];
+
+    const maxVal = Math.max(...wet.map(d => d.val), 1200);
+    const chartHeight = 180;
+    const chartWidth = 320;
+
+    let barsHtml = '';
+    const barWidth = 24;
+    const groupGap = 72;
+    const startX = 35;
+
+    dry.forEach((item, idx) => {
+      const gx = startX + idx * groupGap;
+      const hDry = (item.val / maxVal) * chartHeight;
+      const hWet = (wet[idx].val / maxVal) * chartHeight;
+      const yDry = chartHeight - hDry + 20;
+      const yWet = chartHeight - hWet + 20;
+
+      barsHtml += `
+        <!-- Barra Seca -->
+        <rect x="${gx}" y="${yDry}" width="${barWidth}" height="${hDry}" rx="3" fill="#94a3b8">
+          <title>${item.name} Seco: ${item.val.toFixed(1)} kg</title>
+        </rect>
+        <text x="${gx + barWidth/2}" y="${yDry - 4}" text-anchor="middle" font-size="9" font-weight="600" fill="#64748b">${Math.round(item.val)}</text>
+
+        <!-- Barra Húmeda -->
+        <rect x="${gx + barWidth + 4}" y="${yWet}" width="${barWidth}" height="${hWet}" rx="3" fill="#2563eb">
+          <title>${item.name} Húmedo: ${wet[idx].val.toFixed(1)} kg</title>
+        </rect>
+        <text x="${gx + barWidth + 4 + barWidth/2}" y="${yWet - 4}" text-anchor="middle" font-size="9" font-weight="700" fill="#1d4ed8">${Math.round(wet[idx].val)}</text>
+
+        <!-- Etiqueta Material -->
+        <text x="${gx + barWidth + 2}" y="${chartHeight + 35}" text-anchor="middle" font-size="11" font-weight="600" fill="#1e293b">${item.name}</text>
+      `;
+    });
+
+    barBox.innerHTML = `
+      <svg width="${chartWidth}" height="230" viewBox="0 0 ${chartWidth} 230">
+        <!-- Grid baseline -->
+        <line x1="20" y1="${chartHeight + 20}" x2="${chartWidth - 10}" y2="${chartHeight + 20}" stroke="#cbd5e1" stroke-width="1.5" />
+        ${barsHtml}
+      </svg>
+    `;
+  }
+}
+
+// Helpers de texto en DOM
+function setText(id, txt) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = txt;
+}
+
+// Gestión de Proyectos Guardados en LocalStorage
+function loadSavedProjects() {
+  try {
+    const raw = localStorage.getItem('aci_saved_projects');
+    AppState.savedProjects = raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    AppState.savedProjects = [];
+  }
+  renderSavedProjectsList();
+}
+
+function renderSavedProjectsList() {
+  const list = document.getElementById('savedProjectsList');
+  if (!list) return;
+
+  if (AppState.savedProjects.length === 0) {
+    list.innerHTML = `<p class="helper-text" style="text-align:center; padding: 2rem;">No tienes mezclas guardadas aún. Realiza un cálculo y haz clic en "Guardar Mezcla Actual".</p>`;
+    return;
+  }
+
+  let html = '';
+  AppState.savedProjects.forEach((proj, idx) => {
+    html += `
+      <div class="card" style="margin-bottom: 0.75rem;">
+        <div class="card-body" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; padding: 0.85rem 1.25rem;">
+          <div>
+            <h4 style="font-size: 0.95rem; font-weight:700; color:#0f172a;">${proj.name}</h4>
+            <div style="font-size: 0.75rem; color:#64748b;">
+              f'c: ${proj.input.fc} ${proj.input.unit === 'mpa' ? 'MPa' : 'kg/cm²'} | Slump: ${proj.input.slumpCm} cm | TMN: ${proj.input.tmn}" | Fecha: ${proj.date}
+            </div>
+          </div>
+          <div style="display:flex; gap:0.5rem;">
+            <button class="btn btn-primary btn-sm" onclick="loadProject(${idx})">Cargar</button>
+            <button class="btn btn-outline btn-sm" style="color:#ef4444;" onclick="deleteProject(${idx})">Eliminar</button>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+  list.innerHTML = html;
+}
+
+function promptSaveProject() {
+  const name = prompt('Nombre para identificar este diseño de mezcla (ej: Zapata Bloque A):', `Mezcla f'c ${AppState.currentInput.fc} - ${new Date().toLocaleDateString()}`);
+  if (!name || name.trim() === '') return;
+
+  const project = {
+    id: Date.now().toString(),
+    name: name.trim(),
+    date: new Date().toLocaleString(),
+    input: Object.assign({}, AppState.currentInput)
+  };
+
+  AppState.savedProjects.unshift(project);
+  localStorage.setItem('aci_saved_projects', JSON.stringify(AppState.savedProjects));
+  renderSavedProjectsList();
+  alert('¡Diseño guardado exitosamente!');
+}
+
+window.loadProject = function(idx) {
+  const proj = AppState.savedProjects[idx];
+  if (!proj) return;
+  AppState.currentInput = Object.assign({}, proj.input);
+  syncFormFromState();
+  runCalculation();
+  // Regresar a la pestaña principal
+  document.querySelector('.nav-tab[data-tab="tab-calc"]')?.click();
+};
+
+window.deleteProject = function(idx) {
+  if (confirm('¿Estás seguro de eliminar esta mezcla guardada?')) {
+    AppState.savedProjects.splice(idx, 1);
+    localStorage.setItem('aci_saved_projects', JSON.stringify(AppState.savedProjects));
+    renderSavedProjectsList();
+  }
+};
+
+function exportProjectJson() {
+  const exportData = {
+    app: 'Calculadora Mezclas ACI 211.1',
+    exportDate: new Date().toISOString(),
+    currentDesign: AppState.currentInput,
+    calculationResult: AppState.lastResult,
+    allSavedProjects: AppState.savedProjects
+  };
+
+  const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportData, null, 2));
+  const downloadAnchor = document.createElement('a');
+  downloadAnchor.setAttribute('href', dataStr);
+  downloadAnchor.setAttribute('download', `Mezcla_ACI_${AppState.currentInput.fc}_${Date.now()}.json`);
+  document.body.appendChild(downloadAnchor);
+  downloadAnchor.click();
+  downloadAnchor.remove();
+}
+
+function importProjectJson(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    try {
+      const data = JSON.parse(event.target.result);
+      if (data.currentDesign) {
+        AppState.currentInput = data.currentDesign;
+        if (Array.isArray(data.allSavedProjects)) {
+          AppState.savedProjects = data.allSavedProjects;
+          localStorage.setItem('aci_saved_projects', JSON.stringify(AppState.savedProjects));
+          renderSavedProjectsList();
+        }
+        syncFormFromState();
+        runCalculation();
+        alert('¡Datos importados con éxito!');
+      } else {
+        alert('Archivo JSON no compatible');
+      }
+    } catch (err) {
+      alert('Error al leer el archivo JSON');
+    }
+  };
+  reader.readAsText(file);
+}
+
+  </script>
 </body>
 </html>
