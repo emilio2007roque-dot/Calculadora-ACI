@@ -1,0 +1,13 @@
+{
+  "name": "calculadora-mezclas-aci",
+  "version": "1.0.0",
+  "description": "Calculadora de Diseño de Mezclas de Concreto según el Método ACI 211.1 (PWA para PC y Móvil)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["concreto", "aci-211", "dosificacion", "ingenieria-civil", "pwa"],
+  "author": "",
+  "license": "MIT"
+}
